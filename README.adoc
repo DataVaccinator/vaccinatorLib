@@ -1,0 +1,71 @@
+= DataVaccinator lib
+:author: DataVaccinator Team
+:toc:
+:doctype: book
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+== Introduction
+This is a DataVaccinator Client library which is designed for native use on PC based computer systems running Linux or Microsoft Windows operating systems.
+
+== Building
+The project is built using https://cmake.org[Cmake].
+
+The main dependenies are the following:
+
+* https://github.com/regify/regify-util/[regify-util] which also requires https://icu.unicode.org[ICU]
+* https://github.com/lloyd/yajl/[yajl]
+* https://curl.se/libcurl/[libcurl] and its sub dependencies
+* https://github.com/Mbed-TLS/mbedtls[Mbed TLS]
+* https://libcheck.github.io/check/[libcheck], optional for running the unit tests
+* https://www.doxygen.nl[Doxygen], optional for generating the documentation
+
+=== On Linux
+Here is a sample install on Linux
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DMBEDTLS_PREFIX=../mbedtls/cmake-build-debug/local \
+    -DCMAKE_SYSTEM_NAME=Linux \
+    -DCMAKE_INSTALL_PREFIX=usr ..
+ make install
+
+A package build
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DMBEDTLS_PREFIX=../mbedtls/cmake-build-debug/local \
+        -DCMAKE_SYSTEM_NAME=Linux -DNAME_SUFFIX=x86_64 \
+        -DSAMPLES=ON -DDOCS=ON ..
+ make package_source package
+
+=== On Windows
+This is a sample win32 package build with nmake
+
+ mkdir build
+ cd build
+ cmake.exe -G "NMake Makefiles" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DNAME_SUFFIX=win32 \
+        -DSAMPLES=ON -DDOCS=ON \
+        -DDEPS_PREFIX=..\\win32 \
+        -DCMAKE_SYSTEM_NAME=Windows ..
+ nmake package
+
+A sample source package build with nmake
+
+ mkdir build
+ cd build
+ cmake.exe" -G "NMake Makefiles" \
+        -DDEPS_PREFIX=..\\win32 \
+        -DBUILD_SHARED_LIBS=OFF ..
+ nmake package_source
