@@ -21,20 +21,24 @@
 # options
 set(VERSION 0.0.1 CACHE STRING "The version")
 set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
-set(MBEDTLS_PREFIX ${DEPS_PREFIX} CACHE STRING "mbed TLS installation prefix")
+set(MBEDTLS_PREFIX ${DEPS_PREFIX} CACHE STRING "Mbed TLS installation prefix")
 set(RFUTIL_PREFIX ${DEPS_PREFIX} CACHE STRING "regify-util installation prefix")
 set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
+set(YAJL_LIB "" CACHE STRING "Full path to the yajl library to link against")
 set(CURL_PREFIX ${DEPS_PREFIX} CACHE STRING "libcurl installation prefix")
+set(CURL_LIB "" CACHE STRING "Full path to the cURL library to link against")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" ON)
+option(INCLUDE_MBEDTLS "Whether to include Mbed TLS statically" ON)
+option(INCLUDE_YAJL "Whether to include yajl statically. Do give the full path to the static lib to YAJL_LIB" OFF)
+option(INCLUDE_CURL "Whether to include cURL statically. Do give the full paths to the static libs to CURL_LIB" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(SAMPLES "Whether to build the examples" OFF)
 
-
 # general
 cmake_minimum_required(VERSION 3.6)
 project(vaccinatorLib
-        LANGUAGES C
+        LANGUAGES C CXX
         VERSION ${VERSION}
         )
 set(CMAKE_C_STANDARD 99)
@@ -77,12 +81,12 @@ else()
 endif()
 
 # dependencies
-list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_PREFIX}\\cmake)
+list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_PREFIX}/cmake)
 find_package(MbedTLS REQUIRED)
+list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_PREFIX}/lib/cmake)
+find_package(regify-util REQUIRED)
 if(WIN AND NOT MINGW)
     # visual studio
-    set(RFUTIL_INCLUDE_DIRS ${RFUTIL_PREFIX}\\include)
-    set(RFUTIL_LIBRARY_DIRS ${RFUTIL_PREFIX}\\lib)
     set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}\\include)
     set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}\\lib)
     set(CURL_INCLUDE_DIRS ${CURL_PREFIX}\\include)
@@ -93,13 +97,6 @@ else()
     find_package(PkgConfig REQUIRED)
     find_package(CURL REQUIRED)
     find_package(Threads REQUIRED)
-
-    # get regify-util
-    pkg_check_modules(RFUTIL REQUIRED regify-util)
-    if (RFUTIL_FOUND)
-        message("RFUTIL_LIBRARIES ${RFUTIL_LIBRARIES}")
-        message("RFUTIL_INCLUDE_DIRS ${RFUTIL_INCLUDE_DIRS}")
-    endif(RFUTIL_FOUND)
 
     # get yajl for JSON parsing
     pkg_check_modules(YAJL REQUIRED yajl)

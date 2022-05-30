@@ -42,7 +42,7 @@ add_compile_definitions (
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
-
+# staticlib sharedlib
 function(dosample name)
     add_executable(${name} ${name}.c)
     add_dependencies(${name} ${staticlib})

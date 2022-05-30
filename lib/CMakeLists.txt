@@ -18,53 +18,70 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(SOURCES lib.c json.c misc.c curl.c crypto.c)
-
 function (doLink lib shared)
 
-    if(WIN AND NOT MINGW)
-        # visual studio
-        if(shared)
-            set(RFUTIL_LIBRARIES regify-util.dll.lib)
-            set(YAJL_LIBRARIES yajl.dll.lib)
-            target_compile_definitions(${lib}
-                    PRIVATE -DDV_SHARED
-                    )
+    target_include_directories(${lib} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
+    # regify-util
+    if(shared)
+        target_link_libraries(${lib} PUBLIC RegifyUtil::regify-util)
+    else()
+        target_link_libraries(${lib} PUBLIC RegifyUtil::regify-util_static)
+    endif()
+
+    # Mbed TLS
+    if(shared AND INCLUDE_MBEDTLS)
+        set(MBEDTLS_SCOPE PRIVATE)
+    else()
+        set(MBEDTLS_SCOPE PUBLIC)
+    endif()
+    if(shared AND NOT INCLUDE_MBEDTLS)
+        target_link_libraries(${lib} ${MBEDTLS_SCOPE} MbedTLS::mbedcrypto)
+    else()
+        target_link_libraries(${lib} ${MBEDTLS_SCOPE} MbedTLS::mbedcrypto_static)
+    endif()
+
+    # YAJL
+    if(WIN AND NOT MINGW)
+        if(shared)
+            set(YAJL_LIBRARIES yajl.dll.lib)
         else()
-            set(RFUTIL_LIBRARIES regify-util.lib icuio.lib icuin.lib icuuc.lib icudt.lib)
             set(YAJL_LIBRARIES yajl.lib)
         endif()
     endif()
+    if(shared AND INCLUDE_YAJL)
+        set(YAJL_SCOPE PRIVATE)
+    else()
+        set(YAJL_SCOPE PUBLIC)
+    endif()
+    target_include_directories(${lib} ${YAJL_SCOPE} ${YAJL_INCLUDE_DIRS})
+    if(YAJL_LIB)
+        target_link_libraries(${lib} ${YAJL_SCOPE} ${YAJL_LIB})
+    else()
+        target_link_directories(${lib} ${YAJL_SCOPE} ${YAJL_LIBRARY_DIRS})
+        target_link_libraries(${lib} ${YAJL_SCOPE} ${YAJL_LIBRARIES})
+    endif()
 
-    target_include_directories(${lib}
-            PUBLIC ${RFUTIL_INCLUDE_DIRS} ${YAJL_INCLUDE_DIRS}
-            PRIVATE ${CMAKE_SOURCE_DIR}/include
-            )
-    target_link_directories(${lib}
-            PUBLIC ${RFUTIL_LIBRARY_DIRS} ${YAJL_LIBRARY_DIRS}
-            )
-    target_link_libraries(${lib}
-            PUBLIC ${RFUTIL_LIBRARIES} ${YAJL_LIBRARIES}
-            )
+    # cURL
+    if(shared AND INCLUDE_CURL)
+        set(CURL_SCOPE PRIVATE)
+    else()
+        set(CURL_SCOPE PUBLIC)
+    endif()
+    target_include_directories(${lib} ${CURL_SCOPE} ${CURL_INCLUDE_DIRS})
+    if(CURL_LIB)
+        target_link_libraries(${lib} ${CURL_SCOPE} ${CURL_LIB})
+    else()
+        target_link_directories(${lib} ${CURL_SCOPE} ${CURL_LIBRARY_DIRS})
+        target_link_libraries(${lib} ${CURL_SCOPE} ${CURL_LIBRARIES})
+    endif()
 
     if(WIN AND NOT MINGW)
-        target_compile_definitions(${lib}
-                PRIVATE _CRT_SECURE_NO_DEPRECATE CURL_STATICLIB=ON
-        )
+        target_compile_definitions(${lib} PRIVATE _CRT_SECURE_NO_DEPRECATE)
         target_compile_options(${lib}
                 PRIVATE /MP /Wall /WX /wd4100 /wd4204 /wd4255 /wd4431 /wd4668
                 /wd4710 /wd4711 /wd4774 /wd4820 /wd5045
         )
-        target_include_directories(${lib}
-                PRIVATE ${CURL_INCLUDE_DIRS}
-                )
-        target_link_directories(${lib}
-                PRIVATE ${CURL_LIBRARY_DIRS}
-                )
-        target_link_libraries(${lib}
-                PRIVATE MbedTLS::mbedcrypto ${CURL_LIBRARIES}
-                )
         if(shared)
             set_target_properties(${lib} PROPERTIES VERSION ${PROJECT_VERSION})
         endif()
@@ -72,30 +89,16 @@ function (doLink lib shared)
     else()
         target_compile_options(${lib}
                 PRIVATE -Wall -Werror --pedantic
-                -fPIC -ffunction-sections -fdata-sections
+                -fPIC -ffunction-sections -fdata-sections -fvisibility=hidden
         )
-        if (CMAKE_BUILD_TYPE MATCHES "Release")
-            # this is so that tests can access internal function to test
-            # FIXME not optimal and not windows either
-            target_compile_options(${lib}
-                    PRIVATE -fvisibility=hidden
-                    )
-        endif()
-        target_include_directories(${lib}
-                PUBLIC ${CURL_INCLUDE_DIRS}
-                )
-        target_link_directories(${lib}
-                PUBLIC ${CURL_LIBRARY_DIRS}
-                )
-        target_link_libraries(${lib}
-                PUBLIC MbedTLS::mbedcrypto ${CURL_LIBRARIES}
-                )
         if(shared)
             set_target_properties(${lib} PROPERTIES SOVERSION ${SOVERSION})
         endif()
 
     endif()
 endfunction()
+
+set(SOURCES lib.c json.c misc.c curl.c crypto.c)
 
 if(BUILD_SHARED_LIBS)
     add_library(${sharedlib} SHARED ${SOURCES})

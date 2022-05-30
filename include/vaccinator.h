@@ -143,7 +143,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /** \cond noworry */
-#if defined(DV_SHARED)
+#if defined(vaccinator_EXPORTS)
     #if (defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__))
         #ifdef DV_BUILDING
             #define DVAPI extern __declspec(dllexport)

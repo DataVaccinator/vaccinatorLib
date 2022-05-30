@@ -51,6 +51,8 @@ add_compile_definitions (
 include_directories( ${CMAKE_SOURCE_DIR}/include )
 
 add_executable(tests test.c cipher.c vacc.c caching.c change.c)
+# we use staticlib instead of sharedlib because we test internal functions
+# and -fvisibility=hidden hides these from us
 add_dependencies(tests ${staticlib})
 target_link_libraries(tests ${staticlib} ${CHECK_LIBRARIES} )
 
