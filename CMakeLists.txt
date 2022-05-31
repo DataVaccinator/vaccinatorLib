@@ -100,11 +100,17 @@ else()
     find_package(Threads REQUIRED)
 
     # get yajl for JSON parsing
-    pkg_check_modules(YAJL REQUIRED yajl)
+    pkg_check_modules(YAJL yajl)
     if (YAJL_FOUND)
         message(Found yajl)
     endif(YAJL_FOUND)
     
+endif()
+
+if (NOT YAJL_FOUND)
+  set(YAJL_INCLUDE_DIRS ${YAJL_BASE}/include)
+  set(YAJL_LIBRARY_DIRS ${YAJL_BASE}/lib)
+  set(YAJL_LIBRARIES -lyajl)
 endif()
 
 # core files
