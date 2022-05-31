@@ -122,8 +122,6 @@ endif()
 
 if(INCLUDE_YAJL AND DOCS)
     file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
-    message("DEF_YAJL_LICENSE_PATH? ${YAJL_BASE}/share/yajl/LICENSE")
-    message("DEF_YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH}")
     set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
             "Where the YAJL License file for packaging can be found")
     if(YAJL_LICENSE_PATH MATCHES "$^")
