@@ -20,12 +20,13 @@
 
 # options
 set(VERSION 0.0.1 CACHE STRING "The version")
-set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
-set(MBEDTLS_PREFIX ${DEPS_PREFIX} CACHE STRING "Mbed TLS installation prefix")
-set(RFUTIL_PREFIX ${DEPS_PREFIX} CACHE STRING "regify-util installation prefix")
-set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
+set(REVISION 0 CACHE STRING "The revision")
+set(DEPS_BASE ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
+set(MBEDTLS_BASE ${DEPS_BASE} CACHE STRING "Mbed TLS installation prefix")
+set(RFUTIL_BASE ${DEPS_BASE} CACHE STRING "regify-util installation prefix")
+set(YAJL_BASE ${DEPS_BASE} CACHE STRING "yajl installation prefix")
 set(YAJL_LIB "" CACHE STRING "Full path to the yajl library to link against")
-set(CURL_PREFIX ${DEPS_PREFIX} CACHE STRING "libcurl installation prefix")
+set(CURL_BASE ${DEPS_BASE} CACHE STRING "libcurl installation prefix")
 set(CURL_LIB "" CACHE STRING "Full path to the cURL library to link against")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" ON)
 option(INCLUDE_MBEDTLS "Whether to include Mbed TLS statically" ON)
@@ -81,16 +82,16 @@ else()
 endif()
 
 # dependencies
-list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_PREFIX}/cmake)
+list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_BASE}/cmake)
+list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_BASE}/lib/cmake)
 find_package(MbedTLS REQUIRED)
-list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_PREFIX}/lib/cmake)
 find_package(regify-util REQUIRED)
 if(WIN AND NOT MINGW)
     # visual studio
-    set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}\\include)
-    set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}\\lib)
-    set(CURL_INCLUDE_DIRS ${CURL_PREFIX}\\include)
-    set(CURL_LIBRARY_DIRS ${CURL_PREFIX}\\lib)
+    set(YAJL_INCLUDE_DIRS ${YAJL_BASE}\\include)
+    set(YAJL_LIBRARY_DIRS ${YAJL_BASE}\\lib)
+    set(CURL_INCLUDE_DIRS ${CURL_BASE}\\include)
+    set(CURL_LIBRARY_DIRS ${CURL_BASE}\\lib)
     set(CURL_LIBRARIES libcurl.lib zlib.lib ws2_32.lib crypt32.lib)
 
 else()
@@ -109,6 +110,26 @@ endif()
 # core files
 add_subdirectory(lib)
 configure_file(include/${NAME}.h include/${NAME}.h @ONLY)
+
+if(INCLUDE_MBEDTLS AND DOCS)
+    file(GLOB DEF_MBEDTLS_LICENSE_PATH ${MBEDTLS_BASE}/share/mbedtls/LICENSE)
+    set(MBEDTLS_LICENSE_PATH ${DEF_MBEDTLS_LICENSE_PATH} CACHE STRING
+            "Where the Mbed TLS License file for packaging can be found")
+    if(MBEDTLS_LICENSE_PATH STREQUAL "")
+        message(FATAL_ERROR "We need the Mbed TLS License file for packaging set MBEDTLS_LICENSE_PATH to its location")
+    endif()
+endif()
+
+if(INCLUDE_YAJL AND DOCS)
+    file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
+    message("DEF_YAJL_LICENSE_PATH? ${YAJL_BASE}/share/yajl/LICENSE")
+    message("DEF_YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH}")
+    set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
+            "Where the YAJL License file for packaging can be found")
+    if(YAJL_LICENSE_PATH MATCHES "$^")
+        message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
+    endif()
+endif()
 
 # installation
 include(CMakePackageConfigHelpers)
@@ -188,14 +209,29 @@ if(DOCS)
         add_dependencies(doc rutag)
     endif()
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
-            DESTINATION share/doc)
+            DESTINATION share/${NAME}/doc)
+
+    install(FILES LICENSE DESTINATION share/${NAME})
+    if(INCLUDE_MBEDTLS)
+        message("Bundling Mbed TLS License ${MBEDTLS_LICENSE_PATH}")
+        install(FILES ${MBEDTLS_LICENSE_PATH}
+                DESTINATION share/${NAME}
+                RENAME MbedTLS-LICENSE)
+    endif()
+    if(INCLUDE_YAJL)
+        message("Bundling YAJL License ${YAJL_LICENSE_PATH}")
+        install(FILES ${YAJL_LICENSE_PATH}
+                DESTINATION share/${NAME}
+                RENAME YAJL-LICENSE)
+    endif()
+
 endif()
 
 # packaging
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION}-${REVISION})
 set(CPACK_SYSTEM_NAME ${NAME_SUFFIX})
 set(CPACK_GENERATOR ZIP)
 list(APPEND CPACK_SOURCE_IGNORE_FILES /cmake-.*/ /build.*/ /.git/ /.idea/)

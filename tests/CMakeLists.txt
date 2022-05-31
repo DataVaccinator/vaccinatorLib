@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 # options
-set(CHECK_PREFIX ${DEPS_PREFIX} CACHE STRING "libcheck installation prefix")
+set(CHECK_BASE ${DEPS_BASE} CACHE STRING "libcheck installation prefix")
 set(PROVIDER_URL https://my.provider.com/dv CACHE STRING
         "The test service provider URL that connects to the vault")
 set(VAULT_ID 1 CACHE STRING
@@ -27,7 +27,7 @@ set(VAULT_ID 1 CACHE STRING
 set(VAULT_PW vaccinator CACHE STRING
         "The test data vaccinator vault password to authenticate with")
 
-list(APPEND CMAKE_PREFIX_PATH ${CHECK_PREFIX})
+list(APPEND CMAKE_PREFIX_PATH ${CHECK_BASE})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/")
 find_package(Check REQUIRED)
 

@@ -32,7 +32,7 @@ Here is a sample install on Linux
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DMBEDTLS_PREFIX=../mbedtls/cmake-build-debug/local \
+    -DMBEDTLS_BASE=../mbedtls/cmake-build-debug/local \
     -DCMAKE_SYSTEM_NAME=Linux \
     -DCMAKE_INSTALL_PREFIX=usr ..
  make install
@@ -43,7 +43,7 @@ A package build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_BUILD_TYPE=Release \
-        -DMBEDTLS_PREFIX=../mbedtls/cmake-build-debug/local \
+        -DMBEDTLS_BASE=../mbedtls/cmake-build-debug/local \
         -DCMAKE_SYSTEM_NAME=Linux -DNAME_SUFFIX=x86_64 \
         -DSAMPLES=ON -DDOCS=ON ..
  make package_source package
@@ -57,7 +57,7 @@ This is a sample win32 package build with nmake
         -DCMAKE_BUILD_TYPE=Release \
         -DNAME_SUFFIX=win32 \
         -DSAMPLES=ON -DDOCS=ON \
-        -DDEPS_PREFIX=..\\win32 \
+        -DDEPS_BASE=..\\win32 \
         -DCMAKE_SYSTEM_NAME=Windows ..
  nmake package
 
@@ -66,6 +66,6 @@ A sample source package build with nmake
  mkdir build
  cd build
  cmake.exe" -G "NMake Makefiles" \
-        -DDEPS_PREFIX=..\\win32 \
+        -DDEPS_BASE=..\\win32 \
         -DBUILD_SHARED_LIBS=OFF ..
  nmake package_source
