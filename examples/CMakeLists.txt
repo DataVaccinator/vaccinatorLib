@@ -21,7 +21,7 @@
 set(PROVIDER_URL https://my.provider.com/dv CACHE STRING
         "The test service provider URL that connects to the vault")
 set(APPID 1Ha6xo2u{mRT18 CACHE STRING "The test appid to use")
-set(CACHE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cache CACHE STRING
+set(CACHE_DIR cache CACHE STRING
         "Where the local file cache resides")
 
 if(WIN AND NOT MINGW)
