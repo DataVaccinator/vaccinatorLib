@@ -44,7 +44,7 @@ A package build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DMBEDTLS_BASE=../mbedtls/cmake-build-debug/local \
-        -DCMAKE_SYSTEM_NAME=Linux -DNAME_SUFFIX=x86_64 \
+        -DCMAKE_SYSTEM_NAME=Linux -DNAME_ARCH=x86_64 \
         -DSAMPLES=ON -DDOCS=ON ..
  make package_source package
 
@@ -55,7 +55,7 @@ This is a sample win32 package build with nmake
  cd build
  cmake.exe -G "NMake Makefiles" \
         -DCMAKE_BUILD_TYPE=Release \
-        -DNAME_SUFFIX=win32 \
+        -DNAME_ARCH=win32 \
         -DSAMPLES=ON -DDOCS=ON \
         -DDEPS_BASE=..\\win32 \
         -DCMAKE_SYSTEM_NAME=Windows ..
