@@ -32,6 +32,7 @@ option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" ON)
 option(INCLUDE_MBEDTLS "Whether to include Mbed TLS statically" ON)
 option(INCLUDE_YAJL "Whether to include yajl statically. Do give the full path to the static lib to YAJL_LIB" OFF)
 option(INCLUDE_CURL "Whether to include cURL statically. Do give the full paths to the static libs to CURL_LIB" OFF)
+option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(SAMPLES "Whether to build the examples" OFF)
@@ -81,6 +82,9 @@ else()
     message(FATAL_ERROR "Unknown platform")
 endif()
 
+# in case we INCLUDE stuff
+include(resources/helpers.cmake)
+
 # dependencies
 list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_BASE}/cmake)
 list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_BASE}/lib/cmake)
@@ -122,8 +126,6 @@ endif()
 
 if(INCLUDE_YAJL AND DOCS)
     file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
-    message("DEF_YAJL_LICENSE_PATH? ${YAJL_BASE}/share/yajl/LICENSE")
-    message("DEF_YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH}")
     set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
             "Where the YAJL License file for packaging can be found")
     if(YAJL_LICENSE_PATH MATCHES "$^")
@@ -240,13 +242,4 @@ set(CPACK_SOURCE_GENERATOR ZIP)
 include(CPack)
 
 # debugging
-if(DUMP_VARS)
-    message("VARIABLES:")
-    get_cmake_property(_variableNames VARIABLES)
-    list (SORT _variableNames)
-    foreach (_variableName ${_variableNames})
-        string(SUBSTRING "${${_variableName}}" 0 200 VAL)
-        string(REGEX REPLACE \n "\\\\n" VAL "${VAL}")
-        message("${_variableName} = ${VAL}")
-    endforeach()
-endif()
+#dump("")

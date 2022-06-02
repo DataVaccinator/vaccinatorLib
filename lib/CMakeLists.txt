@@ -40,6 +40,9 @@ function (doLink lib shared)
     else()
         target_link_libraries(${lib} ${MBEDTLS_SCOPE} MbedTLS::mbedcrypto_static)
     endif()
+    if(INSTALL_DEPS AND NOT shared AND INCLUDE_MBEDTLS)
+        getlibs(MbedTLS::mbedcrypto_static "" "mbedcrypto")
+    endif()
 
     # YAJL
     if(WIN AND NOT MINGW)
@@ -57,9 +60,15 @@ function (doLink lib shared)
     target_include_directories(${lib} ${YAJL_SCOPE} ${YAJL_INCLUDE_DIRS})
     if(YAJL_LIB)
         target_link_libraries(${lib} ${YAJL_SCOPE} ${YAJL_LIB})
+        if(INSTALL_DEPS AND NOT shared AND INCLUDE_YAJL)
+            getlibs("${YAJL_LIB}" "" "yajl")
+        endif()
     else()
         target_link_directories(${lib} ${YAJL_SCOPE} ${YAJL_LIBRARY_DIRS})
         target_link_libraries(${lib} ${YAJL_SCOPE} ${YAJL_LIBRARIES})
+        if(INSTALL_DEPS AND NOT shared AND INCLUDE_YAJL)
+            getlibs("${YAJL_LIBRARIES}" "${YAJL_LIBRARY_DIRS}" "yajl")
+        endif()
     endif()
 
     # cURL
@@ -71,9 +80,15 @@ function (doLink lib shared)
     target_include_directories(${lib} ${CURL_SCOPE} ${CURL_INCLUDE_DIRS})
     if(CURL_LIB)
         target_link_libraries(${lib} ${CURL_SCOPE} ${CURL_LIB})
+        if(INSTALL_DEPS AND NOT shared AND INCLUDE_CURL)
+            getlibs("${CURL_LIB}" "" "curl")
+        endif()
     else()
         target_link_directories(${lib} ${CURL_SCOPE} ${CURL_LIBRARY_DIRS})
         target_link_libraries(${lib} ${CURL_SCOPE} ${CURL_LIBRARIES})
+        if(INSTALL_DEPS AND NOT shared AND INCLUDE_CURL)
+            getlibs("${CURL_LIBRARIES}" "${CURL_LIBRARY_DIRS}" "curl")
+        endif()
     endif()
 
     if(WIN AND NOT MINGW)
@@ -89,24 +104,24 @@ function (doLink lib shared)
     else()
         target_compile_options(${lib}
                 PRIVATE -Wall -Werror --pedantic
-                -fPIC -ffunction-sections -fdata-sections -fvisibility=hidden
+                ${CMAKE_C_COMPILE_OPTIONS_PIC}
+                -ffunction-sections -fdata-sections -fvisibility=hidden
         )
         if(shared)
             set_target_properties(${lib} PROPERTIES SOVERSION ${SOVERSION})
         endif()
 
     endif()
+    if(INSTALL_DEPS AND NOT shared)
+        set(EXTRA_ARCHIVES ${EXTRA_ARCHIVES} PARENT_SCOPE)
+    endif()
 endfunction()
 
-set(SOURCES lib.c json.c misc.c curl.c crypto.c)
-
-if(BUILD_SHARED_LIBS)
-    add_library(${sharedlib} SHARED ${SOURCES})
-    doLink(${sharedlib} ON)
-    install(TARGETS ${sharedlib}
-            EXPORT VaccinatorTargets
-            DESTINATION lib)
+if(INSTALL_DEPS)
+    set(EXTRA_ARCHIVES "")
 endif()
+
+set(SOURCES lib.c json.c misc.c curl.c crypto.c)
 
 add_library(${staticlib} STATIC ${SOURCES})
 doLink(${staticlib} OFF)
@@ -117,4 +132,17 @@ install(TARGETS ${staticlib}
         EXPORT VaccinatorTargets
         DESTINATION lib)
 
+if(BUILD_SHARED_LIBS)
+    add_library(${sharedlib} SHARED ${SOURCES})
+    doLink(${sharedlib} ON)
+    install(TARGETS ${sharedlib}
+            EXPORT VaccinatorTargets
+            DESTINATION lib)
+endif()
 
+if(INSTALL_DEPS)
+    foreach(lib ${EXTRA_ARCHIVES})
+        install(FILES ${lib} DESTINATION lib)
+        message("installing ${lib}")
+    endforeach()
+endif()
