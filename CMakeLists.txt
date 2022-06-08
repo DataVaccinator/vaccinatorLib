@@ -102,16 +102,18 @@ if(WIN AND NOT MINGW)
     set(CURL_LIBRARIES libcurl.lib zlib.lib ws2_32.lib crypt32.lib)
 
 else()
-    find_package(PkgConfig REQUIRED)
     find_package(CURL REQUIRED)
     find_package(Threads REQUIRED)
 
-    # get yajl for JSON parsing
-    pkg_check_modules(YAJL yajl)
-    if (YAJL_FOUND)
-        message(Found yajl)
-    endif(YAJL_FOUND)
-    
+    find_package(PkgConfig)
+    if (PkgConfig_FOUND)
+        # get yajl for JSON parsing
+        pkg_check_modules(YAJL yajl)
+        if (YAJL_FOUND)
+            message(Found yajl)
+        endif()
+    endif()
+
 endif()
 
 if (NOT YAJL_FOUND)
