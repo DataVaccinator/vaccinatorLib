@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 # options
-set(VERSION 0.0.1 CACHE STRING "The version")
+set(VERSION 1.0.0 CACHE STRING "The version")
 set(REVISION 0 CACHE STRING "The revision")
 set(DEPS_BASE ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
 set(MBEDTLS_BASE ${DEPS_BASE} CACHE STRING "Mbed TLS installation prefix")
@@ -34,6 +34,7 @@ option(INCLUDE_YAJL "Whether to include yajl statically. Do give the full path t
 option(INCLUDE_CURL "Whether to include cURL statically. Do give the full paths to the static libs to CURL_LIB" OFF)
 option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
+option(DOC_ONLY "Whether to only generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(SAMPLES "Whether to build the examples" OFF)
 
@@ -89,84 +90,89 @@ endif()
 include(resources/helpers.cmake)
 
 # dependencies
-list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_BASE}/cmake)
-list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_BASE}/lib/cmake)
-find_package(MbedTLS REQUIRED)
-find_package(regify-util REQUIRED)
-if(WIN AND NOT MINGW)
-    # visual studio
-    set(YAJL_INCLUDE_DIRS ${YAJL_BASE}\\include)
-    set(YAJL_LIBRARY_DIRS ${YAJL_BASE}\\lib)
-    set(CURL_INCLUDE_DIRS ${CURL_BASE}\\include)
-    set(CURL_LIBRARY_DIRS ${CURL_BASE}\\lib)
-    set(CURL_LIBRARIES libcurl.lib zlib.lib ws2_32.lib crypt32.lib)
+if(NOT DOC_ONLY)
+    list(APPEND CMAKE_PREFIX_PATH ${MBEDTLS_BASE}/cmake)
+    list(APPEND CMAKE_PREFIX_PATH ${RFUTIL_BASE}/lib/cmake)
+    find_package(MbedTLS REQUIRED)
+    find_package(regify-util REQUIRED)
+    if(WIN AND NOT MINGW)
+        # visual studio
+        set(YAJL_INCLUDE_DIRS ${YAJL_BASE}\\include)
+        set(YAJL_LIBRARY_DIRS ${YAJL_BASE}\\lib)
+        set(CURL_INCLUDE_DIRS ${CURL_BASE}\\include)
+        set(CURL_LIBRARY_DIRS ${CURL_BASE}\\lib)
+        set(CURL_LIBRARIES libcurl.lib zlib.lib ws2_32.lib crypt32.lib)
 
-else()
-    find_package(CURL REQUIRED)
-    find_package(Threads REQUIRED)
+    else()
+        find_package(CURL REQUIRED)
+        find_package(Threads REQUIRED)
 
-    find_package(PkgConfig)
-    if (PkgConfig_FOUND)
-        # get yajl for JSON parsing
-        pkg_check_modules(YAJL yajl)
-        if (YAJL_FOUND)
-            message(Found yajl)
+        find_package(PkgConfig)
+        if (PkgConfig_FOUND)
+            # get yajl for JSON parsing
+            pkg_check_modules(YAJL yajl)
+            if (YAJL_FOUND)
+                message(Found yajl)
+            endif()
+        endif()
+
+    endif()
+
+    if (NOT YAJL_FOUND)
+      set(YAJL_INCLUDE_DIRS ${YAJL_BASE}/include)
+      set(YAJL_LIBRARY_DIRS ${YAJL_BASE}/lib)
+      set(YAJL_LIBRARIES -lyajl)
+    endif()
+
+    # core files
+    add_subdirectory(lib)
+endif()
+
+configure_file(include/${NAME}.h include/${NAME}.h @ONLY)
+
+if(NOT DOC_ONLY)
+    if(INCLUDE_MBEDTLS AND DOCS)
+        file(GLOB DEF_MBEDTLS_LICENSE_PATH ${MBEDTLS_BASE}/share/mbedtls/LICENSE)
+        set(MBEDTLS_LICENSE_PATH ${DEF_MBEDTLS_LICENSE_PATH} CACHE STRING
+                "Where the Mbed TLS License file for packaging can be found")
+        if(MBEDTLS_LICENSE_PATH STREQUAL "")
+            message(FATAL_ERROR "We need the Mbed TLS License file for packaging set MBEDTLS_LICENSE_PATH to its location")
         endif()
     endif()
 
-endif()
-
-if (NOT YAJL_FOUND)
-  set(YAJL_INCLUDE_DIRS ${YAJL_BASE}/include)
-  set(YAJL_LIBRARY_DIRS ${YAJL_BASE}/lib)
-  set(YAJL_LIBRARIES -lyajl)
-endif()
-
-# core files
-add_subdirectory(lib)
-configure_file(include/${NAME}.h include/${NAME}.h @ONLY)
-
-if(INCLUDE_MBEDTLS AND DOCS)
-    file(GLOB DEF_MBEDTLS_LICENSE_PATH ${MBEDTLS_BASE}/share/mbedtls/LICENSE)
-    set(MBEDTLS_LICENSE_PATH ${DEF_MBEDTLS_LICENSE_PATH} CACHE STRING
-            "Where the Mbed TLS License file for packaging can be found")
-    if(MBEDTLS_LICENSE_PATH STREQUAL "")
-        message(FATAL_ERROR "We need the Mbed TLS License file for packaging set MBEDTLS_LICENSE_PATH to its location")
+    if(INCLUDE_YAJL AND DOCS)
+        file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
+        set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
+                "Where the YAJL License file for packaging can be found")
+        if(YAJL_LICENSE_PATH MATCHES "$^")
+            message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
+        endif()
     endif()
-endif()
 
-if(INCLUDE_YAJL AND DOCS)
-    file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
-    set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
-            "Where the YAJL License file for packaging can be found")
-    if(YAJL_LICENSE_PATH MATCHES "$^")
-        message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
-    endif()
+    # installation
+    include(CMakePackageConfigHelpers)
+    # generate the config file that is includes the exports
+    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
+            "${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfig.cmake"
+            INSTALL_DESTINATION "lib/cmake/vaccinator"
+            NO_SET_AND_CHECK_MACRO
+            NO_CHECK_REQUIRED_COMPONENTS_MACRO )
+    write_basic_package_version_file(
+            "${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfigVersion.cmake"
+            VERSION "${DvLib_VERSION_MAJOR}.${DvLib_VERSION_MINOR}"
+            COMPATIBILITY AnyNewerVersion
+    )
+    install(FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfig.cmake
+            ${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfigVersion.cmake
+            DESTINATION lib/cmake/vaccinator
+            )
+    install(EXPORT VaccinatorTargets
+            FILE VaccinatorTargets.cmake
+            DESTINATION lib/cmake/vaccinator )
+    install(DIRECTORY include/
+            DESTINATION include)
 endif()
-
-# installation
-include(CMakePackageConfigHelpers)
-# generate the config file that is includes the exports
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfig.cmake"
-        INSTALL_DESTINATION "lib/cmake/vaccinator"
-        NO_SET_AND_CHECK_MACRO
-        NO_CHECK_REQUIRED_COMPONENTS_MACRO )
-write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfigVersion.cmake"
-        VERSION "${DvLib_VERSION_MAJOR}.${DvLib_VERSION_MINOR}"
-        COMPATIBILITY AnyNewerVersion
-)
-install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfig.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/VaccinatorConfigVersion.cmake
-        DESTINATION lib/cmake/vaccinator
-        )
-install(EXPORT VaccinatorTargets
-        FILE VaccinatorTargets.cmake
-        DESTINATION lib/cmake/vaccinator )
-install(DIRECTORY include/
-        DESTINATION include)
 
 # tests
 if(TESTING)
@@ -221,21 +227,24 @@ if(DOCS)
     if(RULINK)
         add_dependencies(doc rutag)
     endif()
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
-            DESTINATION share/${NAME}/doc)
 
-    install(FILES LICENSE DESTINATION share/${NAME})
-    if(INCLUDE_MBEDTLS)
-        message("Bundling Mbed TLS License ${MBEDTLS_LICENSE_PATH}")
-        install(FILES ${MBEDTLS_LICENSE_PATH}
-                DESTINATION share/${NAME}
-                RENAME MbedTLS-LICENSE)
-    endif()
-    if(INCLUDE_YAJL)
-        message("Bundling YAJL License ${YAJL_LICENSE_PATH}")
-        install(FILES ${YAJL_LICENSE_PATH}
-                DESTINATION share/${NAME}
-                RENAME YAJL-LICENSE)
+    if(NOT DOC_ONLY)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
+                DESTINATION share/${NAME}/doc)
+
+        install(FILES LICENSE DESTINATION share/${NAME})
+        if(INCLUDE_MBEDTLS)
+            message("Bundling Mbed TLS License ${MBEDTLS_LICENSE_PATH}")
+            install(FILES ${MBEDTLS_LICENSE_PATH}
+                    DESTINATION share/${NAME}
+                    RENAME MbedTLS-LICENSE)
+        endif()
+        if(INCLUDE_YAJL)
+            message("Bundling YAJL License ${YAJL_LICENSE_PATH}")
+            install(FILES ${YAJL_LICENSE_PATH}
+                    DESTINATION share/${NAME}
+                    RENAME YAJL-LICENSE)
+        endif()
     endif()
 
 endif()
