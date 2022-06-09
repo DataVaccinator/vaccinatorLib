@@ -200,7 +200,7 @@ if(DOCS)
 
     if(RULINK)
         set(RUBASE http://adocs.de.regify.com/docs/regify-util/1.2/api_doc
-                CACHE STRING "Where the tag file for regify-utils can be found")
+                CACHE STRING "Folder under which the regify-utils.tag file can be found")
 
         find_program(CURL_EXECUTABLE
                 NAMES curl curl.exe

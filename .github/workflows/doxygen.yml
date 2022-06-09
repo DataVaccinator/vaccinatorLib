@@ -19,7 +19,9 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory.
       # Not using `CMAKE_BUILD_TYPE` since we only generate docs
-      run: cmake -B ${{github.workspace}}/build -DDOCS=ON -DDOC_ONLY=ON
+      run: >
+        cmake -B ${{github.workspace}}/build -DDOCS=ON -DDOC_ONLY=ON 
+          -DRULINK=ON -DRUBASE=https://regify.github.io/regify-util
 
     - name: Build Docs
       # Actually build the docs
