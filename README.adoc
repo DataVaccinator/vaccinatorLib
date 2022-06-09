@@ -11,7 +11,8 @@ ifdef::env-github[]
 endif::[]
 
 == Introduction
-This is a DataVaccinator Client library which is designed for native use on PC based computer systems running Linux or Microsoft Windows operating systems.
+This is a DataVaccinator Client library which is designed for native use on PC based computer systems running Linux, macOS or Microsoft Windows operating systems.
+A current Linux version of the API Documentation can be found https://datavaccinator.github.io/vaccinatorLib/[here].
 
 == Building
 The project is built using https://cmake.org[Cmake].
@@ -25,16 +26,18 @@ The main dependenies are the following:
 * https://libcheck.github.io/check/[libcheck], optional for running the unit tests
 * https://www.doxygen.nl[Doxygen], optional for generating the documentation
 
+The following build instructions assume that the necessary build dependencies can be found under a peer folder named `thirdparty`.
+
 === On Linux
 Here is a sample install on Linux
 
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DMBEDTLS_BASE=../mbedtls/cmake-build-debug/local \
-    -DCMAKE_SYSTEM_NAME=Linux \
-    -DCMAKE_INSTALL_PREFIX=usr ..
+        -DCMAKE_SYSTEM_NAME=Linux -DDNAME_ARCH=x86_64 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DDEPS_BASE=../thirdparty \
+        -DINCLUDE_MBEDTLS=ON ..
  make install
 
 A package build
@@ -42,9 +45,10 @@ A package build
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_SYSTEM_NAME=Linux -DDNAME_ARCH=x86_64 \
         -DCMAKE_BUILD_TYPE=Release \
-        -DMBEDTLS_BASE=../mbedtls/cmake-build-debug/local \
-        -DCMAKE_SYSTEM_NAME=Linux -DNAME_ARCH=x86_64 \
+        -DDEPS_BASE=../thirdparty \
+        -DINCLUDE_MBEDTLS=ON \
         -DSAMPLES=ON -DDOCS=ON ..
  make package_source package
 
@@ -53,19 +57,46 @@ This is a sample win32 package build with nmake
 
  mkdir build
  cd build
- cmake.exe -G "NMake Makefiles" \
+ cmake.exe -G "NMake Makefiles"-DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=win32 \
         -DCMAKE_BUILD_TYPE=Release \
-        -DNAME_ARCH=win32 \
-        -DSAMPLES=ON -DDOCS=ON \
-        -DDEPS_BASE=..\\win32 \
-        -DCMAKE_SYSTEM_NAME=Windows ..
+        -DDEPS_BASE=..\\thirdparty \
+        -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON -DINCLUDE_CURL=ON \
+        -DSAMPLES=ON -DDOCS=ON  ..
  nmake package
 
 A sample source package build with nmake
 
  mkdir build
  cd build
- cmake.exe" -G "NMake Makefiles" \
-        -DDEPS_BASE=..\\win32 \
+ cmake.exe -G "NMake Makefiles"-DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=win32 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DDEPS_BASE=..\\thirdparty \
         -DBUILD_SHARED_LIBS=OFF ..
  nmake package_source
+
+=== On macOS
+Here is a sample install on Linux
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_SYSTEM_NAME=Darwin -DDNAME_ARCH=x86_64 \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DDEPS_BASE=../thirdparty \
+    -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON ..
+ make install
+
+A package build
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_SYSTEM_NAME=Darwin -DDNAME_ARCH=x86_64 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DDEPS_BASE=../thirdparty \
+        -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON \
+        -DSAMPLES=ON -DDOCS=ON ..
+ make package
+
