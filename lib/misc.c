@@ -134,7 +134,6 @@ static rusize_s pcReader (void *msg, void *buf, rusize len) {
 static void dvCleanLogger(void *ctx, const char *message) {
     ruCleaner pc = dvGetCleaner();
     ruCleanIo(pc, &pcReader, (void*)message, &pcWriter, NULL);
-    ruCleanNow(pc);
 }
 
 void dvCleanerAdd(const char* secret) {
