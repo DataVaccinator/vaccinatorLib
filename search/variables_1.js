@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['get_416',['get',['https://regify.github.io/regify-util/struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'ruBuffer']]]
+  ['get_418',['get',['https://regify.github.io/regify-util/struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'ruBuffer']]]
 ];
