@@ -105,10 +105,10 @@ ruList search(dvCtx dc, const char* appId, const char* word, const char* searchv
     if (searchvid) {
         ruIterator li = ruListIter(vids);
         bool found = false;
-        for (char *vd = ruIterCurrent(li, char*); li;
+        for (char *vd = ruIterNext(li, char*); li;
              vd = ruIterNext(li, char*)) {
             ruVerbLogf("searchvids vid: '%s'", vd);
-            if (ruStrcmp(searchvid, vd) == 0) found = true;
+            if (ruStrCmp(searchvid, vd) == 0) found = true;
         }
         fail_unless(true == found, retText, test, true, found);
     }
@@ -179,11 +179,11 @@ void dochange(dvCtx dc, const char* appId, ruList vids, rusize cnt, const char* 
 
     ruIterator li = ruListIter(vids);
     test = "dvGetVid";
-    for(char *out, *vd = ruIterCurrent(li, char*); li;
+    for(char *out, *vd = ruIterNext(li, char*); li;
                     vd = ruIterNext(li, char*)) {
         ret = dvGetVid(vidMap, vd, &out);
         ruVerbLogf("vid: '%s' data: '%s' status: %d", vd, out, ret);
-        if (ruStrcmp(misvid, vd) == 0) {
+        if (ruStrCmp(misvid, vd) == 0) {
             exp = DVE_INVALID_CREDENTIALS;
             fail_unless(exp == ret, retText, test, exp, ret);
             fail_unless(NULL == out, retText, test, NULL, out);
@@ -214,7 +214,7 @@ void getdata(dvCtx dc, const char* vid, const char* pid) {
 
     ruIterator li = ruListIter(fovids);
     test = "dvGetVid";
-    for(char *out, *vd = ruIterCurrent(li, char*); li;
+    for(char *out, *vd = ruIterNext(li, char*); li;
         vd = ruIterNext(li, char*)) {
         ret = dvGetVid(vidMap, vd, &out);
         fail_unless(exp == ret, retText, test, exp, ret);
@@ -241,7 +241,7 @@ START_TEST ( change ) {
     ret = dvNew(&dc, PROVIDER_URL, oldId, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+    if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
         // disable certificate checks
         test = "dvSetProp";
         ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");

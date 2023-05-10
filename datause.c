@@ -87,7 +87,7 @@ int main ( int argc, char **argv ) {
             a1 = argv[1];
             // -d turns on verbose debug logging
             // -v turns on verbose debug logging with curl debug logging
-            if (ruStrcmp(a1, "-v") == 0 || ruStrcmp(a1, "-d") == 0) {
+            if (ruStrCmp(a1, "-v") == 0 || ruStrCmp(a1, "-d") == 0) {
                 // this logger is preferred over ruSetLogger
                 // because it sanitizes sensitive information out
                 dvSetCleanLogger(myLogFunc, RU_LOG_VERB, (void*)logfile);
@@ -100,12 +100,12 @@ int main ( int argc, char **argv ) {
         ret = dvNew(&dc, PROVIDER_URL, APPID, kvs);
         if (ret) break;
         // check for easy SSL mode
-        if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
             // disable certificate checks
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
             if (ret) break;
         }
-        if (ruStrcmp(a1, "-v") == 0) {
+        if (ruStrCmp(a1, "-v") == 0) {
             // turn on curl debug logging
             ret = dvSetProp(dc, DV_CURL_LOGGING, "1");
             if (ret) break;
@@ -143,7 +143,7 @@ int main ( int argc, char **argv ) {
         ret = dvGet(dc, vids, &data);
         if (ret) break;
         ruIterator li = ruListIter(vids);
-        for(char *out, *vd = ruIterCurrent(li, char*); li;
+        for(char *out, *vd = ruIterNext(li, char*); li;
             vd = ruIterNext(li, char*)) {
             ret = dvGetVid(data, vd, &out);
             if (ret == RUE_OK) {
@@ -159,7 +159,7 @@ int main ( int argc, char **argv ) {
         ret = dvSearch(dc, searchTerms, &foundVids);
         if (ret) break;
         li = ruListIter(foundVids);
-        for(char* vd = ruIterCurrent(li, char*); li; vd = ruIterNext(li, char*)) {
+        for(char* vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*)) {
             printf("found vid: '%s'\n", vd);
         }
 

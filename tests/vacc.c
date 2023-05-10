@@ -221,7 +221,7 @@ START_TEST ( run ) {
     ret = dvNew(&dc, PROVIDER_URL, APPID, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+    if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
         // disable certificate checks
         test = "dvSetProp";
         ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
@@ -261,7 +261,7 @@ START_TEST ( run ) {
 
     ruIterator li = ruListIter(vids);
     test = "dvGetVid";
-    for(char *out, *vd = ruIterCurrent(li, char*); li;
+    for(char *out, *vd = ruIterNext(li, char*); li;
             vd = ruIterNext(li, char*)) {
         ret = dvGetVid(data, vd, &out);
         fail_unless(exp == ret, retText, test, exp, ret);
@@ -281,7 +281,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     li = ruListIter(fndVids);
-    for(char* vd = ruIterCurrent(li, char*); li; vd = ruIterNext(li, char*)) {
+    for(char* vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*)) {
         ruVerbLogf("fndVids vid: '%s'", vd);
         ck_assert_str_ne(fovid, vd);
     }
@@ -310,9 +310,9 @@ START_TEST ( run ) {
 
     li = ruListIter(fndVids2);
     bool found = false;
-    for(char* vd = ruIterCurrent(li, char*); li; vd = ruIterNext(li, char*)) {
+    for(char* vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*)) {
         ruVerbLogf("fndVids2 vid: '%s'", vd);
-        if (ruStrcmp(fovid, vd) == 0) found = true;
+        if (ruStrCmp(fovid, vd) == 0) found = true;
     }
     fail_unless(true == found, retText, test, true, found);
 
@@ -364,7 +364,7 @@ START_TEST ( publish ) {
         ret = dvNew(&dc, PROVIDER_URL, APPID, NULL);
         fail_unless(exp == ret, retText, test, exp, ret);
 
-        if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
             // disable certificate checks
             test = "dvSetProp";
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
@@ -423,7 +423,7 @@ START_TEST ( publish ) {
 
         ruIterator li = ruListIter(vids);
         test = "dvGetVid";
-        for(char *out, *vd = ruIterCurrent(li, char*); li;
+        for(char *out, *vd = ruIterNext(li, char*); li;
             vd = ruIterNext(li, char*)) {
             ret = dvGetVid(data, vd, &out);
             fail_unless(exp == ret, retText, test, exp, ret);

@@ -79,7 +79,7 @@ START_TEST ( run ) {
         ret = dvNew(&dc, PROVIDER_URL, APPID, kvs);
         fail_unless(exp == ret, retText, test, exp, ret);
 
-        if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
             // disable certificate checks
             test = "dvSetProp";
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");

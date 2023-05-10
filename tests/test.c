@@ -23,7 +23,7 @@
 
 int main ( int argc, char **argv ) {
     int32_t number_failed;
-    if (argc > 1 && ruStrcmp(argv[1], "-v") == 0) {
+    if (argc > 1 && ruStrCmp(argv[1], "-v") == 0) {
         ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL);
     } else {
         ruSetLogger(ruStdErrorLogger, RU_LOG_INFO, NULL);
