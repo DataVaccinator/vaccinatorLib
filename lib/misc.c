@@ -104,18 +104,18 @@ DVAPI int32_t dvGetVid(ruMap vidMap, const char* vid, char** pid) {
 static ruCleaner pwCleaner_ = NULL;
 // cleaned log context
 static ruLogFunc logger_ = NULL;
-static void* userLogData_ = NULL;
+static perm_ptr userLogData_ = NULL;
 // The current dvPwReplacement of a secret when calling dvSetProp with DV_SECRET.
 char *dvPwReplacement = dvDefaultSecretPlaceHolder;
 
-static ruCleaner dvGetCleaner() {
+static ruCleaner dvGetCleaner(void) {
     if (!pwCleaner_) {
         pwCleaner_ = ruCleanNew(0);
     }
     return pwCleaner_;
 }
 
-static rusize_s pcWriter (void *ctx, void *buf, rusize len) {
+static rusize_s pcWriter (perm_ptr ctx, trans_ptr buf, rusize len) {
     if (logger_) {
         ((char*)buf)[len] = '\0';
         logger_(userLogData_, buf);
@@ -123,7 +123,7 @@ static rusize_s pcWriter (void *ctx, void *buf, rusize len) {
     return (rusize_s)len;
 }
 
-static rusize_s pcReader (void *msg, void *buf, rusize len) {
+static rusize_s pcReader (perm_ptr msg, ptr buf, rusize len) {
     if (!msg) return 0;
     rusize sz = strlen(msg) + 1;
     if (sz > len) sz = len;
@@ -131,12 +131,12 @@ static rusize_s pcReader (void *msg, void *buf, rusize len) {
     return (rusize_s)sz;
 }
 
-static void dvCleanLogger(void *ctx, const char *message) {
+static void dvCleanLogger(perm_ptr ctx, trans_chars message) {
     ruCleaner pc = dvGetCleaner();
     ruCleanIo(pc, &pcReader, (void*)message, &pcWriter, NULL);
 }
 
-void dvCleanerAdd(const char* secret) {
+void dvCleanerAdd(trans_chars secret) {
     if (dvPwReplacement) {
         ruCleanAdd(dvGetCleaner(), secret, dvPwReplacement);
     } else {
@@ -144,7 +144,7 @@ void dvCleanerAdd(const char* secret) {
     }
 }
 
-DVAPI void dvSetCleanLogger(ruLogFunc logger, u_int32_t logLevel, void* userData) {
+DVAPI void dvSetCleanLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData) {
     logger_ = logger;
     userLogData_ = userData;
     if (logger_) {

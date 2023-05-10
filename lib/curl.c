@@ -27,7 +27,7 @@ static void setKvListValue(dvKvList l, const char* value, rusize len) {
         memcpy(l->val, value, len);
         l->len = len;
     } else {
-        l->val = ruStrdup(value);
+        l->val = ruStrDup(value);
         l->len = strlen(l->val);
     }
 }
@@ -37,7 +37,7 @@ int32_t newKvList(dvKvList* kvl, const char* key, const char* value, rusize len)
     if (!kvl || !key || !value) return RUE_PARAMETER_NOT_SET;
     l = ruMalloc0(1, struct dv_kvList);
     l->type = dvKvListType;
-    l->key = ruStrdup(key);
+    l->key = ruStrDup(key);
     setKvListValue(l, value, len);
     *kvl = l;
     return RUE_OK;
@@ -50,7 +50,7 @@ int32_t addKv(dvKvList kvl, const char* key, const char* value, rusize len) {
     /* go through the list to a match or the end */
     l = kvl;
     while (true) {
-        if (ruStrcmp(l->key, key) == 0) {
+        if (ruStrEquals(l->key, key)) {
             // matched, replace existing
             ruFree(l->val);
             setKvListValue(l, value, len);

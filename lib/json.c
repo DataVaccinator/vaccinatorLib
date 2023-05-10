@@ -55,7 +55,7 @@ int32_t jsonEncodeString(const char*input, char** output) {
             ret = RUE_GENERAL;
             break;
         }
-        *output = ruStrdup((const char*)buf);
+        *output = ruStrDup((const char*)buf);
         ret = RUE_OK;
 
     } while(false);
@@ -85,7 +85,7 @@ int32_t parseString(yajl_val node, const char* key, char** value) {
     const char * path[] = { key, (const char *) 0 };
     yajl_val v = yajl_tree_get(node, path, yajl_t_string);
     if (v) {
-        *value = ruStrdup(YAJL_GET_STRING(v));
+        *value = ruStrDup(YAJL_GET_STRING(v));
         ruVerbLogf("%s is %s" , key, *value);
         return RUE_OK;
     }
@@ -106,7 +106,7 @@ int32_t parseStatus(yajl_val node, bool* invalidRequest) {
         return DVE_PROTOCOL_ERROR;
     }
     nodeValue = YAJL_GET_STRING(v);
-    if (ruStrcmp(STATUS_OK, nodeValue) == 0) {
+    if (ruStrEquals(STATUS_OK, nodeValue)) {
         // status: OK
         return RUE_OK;
     }
@@ -127,12 +127,12 @@ int32_t parseStatus(yajl_val node, bool* invalidRequest) {
         char *desc = YAJL_GET_STRING(v);
         dvSetError(desc);
     }
-    if (ruStrcmp(STATUS_INVALID, nodeValue) == 0) {
+    if (ruStrEquals(STATUS_INVALID, nodeValue)) {
         ruVerbLogf("status was invalid. EC: %d", ret);
         if (invalidRequest) *invalidRequest = true;
         return ret;
     }
-    if (ruStrcmp(STATUS_ERROR, nodeValue) != 0) {
+    if (ruStrEquals(STATUS_ERROR, nodeValue)) {
         ruCritLogf("status was of unknown type: '%s'", nodeValue);
     }
     return ret;
@@ -154,7 +154,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
     char *msg = NULL;
     dvGetRes gr = NULL;
     ruIterator li = ruListIter(vids);
-    for (char* vid = ruIterCurrent(li, char*); vid; vid = ruIterNext(li, char*)) {
+    for (char* vid = ruIterNext(li, char*); vid; vid = ruIterNext(li, char*)) {
         path[0] = vid;
         vd = yajl_tree_get(dta, path, yajl_t_object);
         if (!vd || !YAJL_IS_OBJECT(vd)) {
@@ -176,9 +176,9 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
         }
 
         nodeValue = YAJL_GET_STRING(v);
-        if (ruStrcmp(STATUS_NOT_FOUND, nodeValue) == 0) {
+        if (ruStrEquals(STATUS_NOT_FOUND, nodeValue)) {
             ruVerbLogf("status for entry '%s' id not found", vid);
-            ret = ruMapPut(*data, ruStrdup(vid),
+            ret = ruMapPut(*data, ruStrDup(vid),
                            newGetRes(NULL, RUE_FILE_NOT_FOUND));
             if (ret != RUE_OK) {
                 ruCritLogf("failed adding entry '%s' to map", vid);
@@ -186,7 +186,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
             }
             continue;
         }
-        if (ruStrcmp(STATUS_OK, nodeValue) != 0) {
+        if (!ruStrEquals(STATUS_OK, nodeValue)) {
             ruWarnLogf("status for entry '%s' was '%s'", vid, nodeValue);
             ret = DVE_PROTOCOL_ERROR;
             break;
@@ -207,7 +207,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
         if (ret == DVE_INVALID_CREDENTIALS) {
             if (recode) {
                 // store the checksum
-                gr = newGetRes(ruStrdup(&rcs[0]), ret);
+                gr = newGetRes(ruStrDup(&rcs[0]), ret);
             } else {
                 gr = newGetRes(NULL, ret);
             }
@@ -220,7 +220,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
             msg = NULL;
         }
         ruFree(msg);
-        ret = ruMapPut(*data, ruStrdup(vid), gr);
+        ret = ruMapPut(*data, ruStrDup(vid), gr);
         if (ret != RUE_OK) {
             ruCritLogf("failed adding entry '%s' to map", vid);
             break;
@@ -262,7 +262,7 @@ int32_t parseSearchData(yajl_val node, ruList* vids) {
         if (!*vids) {
             *vids = ruListNew(free);
         }
-        ret = ruListAppend(*vids, ruStrdup(YAJL_GET_STRING(vid)));
+        ret = ruListAppend(*vids, ruStrDup(YAJL_GET_STRING(vid)));
         if (ret != RUE_OK) {
             ruCritLogf("failed adding entry '%s' to map", vid);
             break;
