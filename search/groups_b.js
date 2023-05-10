@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['string_20object_482',['String Object',['https://regify.github.io/regify-util/group__ru_string.html',1,'']]],
-  ['string_20functions_483',['String Functions',['https://regify.github.io/regify-util/group__string.html',1,'']]]
+  ['regify_2dutil_20error_20codes_751',['regify-util Error Codes',['https://regify.github.io/regify-util/group__ruerror.html',1,'']]],
+  ['regular_20expressions_752',['Regular Expressions',['https://regify.github.io/regify-util/group__regex.html',1,'']]]
 ];

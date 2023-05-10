@@ -23,11 +23,11 @@ var group__dvgeneral =
       [ "DV_CURL_LOGGING", "group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fa711b015868f7ab71a58e8444ceade44c", null ]
     ] ],
     [ "dvFree", "group__dvgeneral.html#ga9d755a06f9460016c54ca265d25cf7b5", null ],
-    [ "dvLastError", "group__dvgeneral.html#ga04cac59ca883f1446b009f7d51ccdbc9", null ],
+    [ "dvLastError", "group__dvgeneral.html#ga47209f4347d064effde208daec48238f", null ],
     [ "dvNew", "group__dvgeneral.html#gaa569238d6383532ab3e56ff82195457a", null ],
-    [ "dvSetCleanLogger", "group__dvgeneral.html#gad77377de34ba943ab4313b50ec565ef3", null ],
+    [ "dvSetCleanLogger", "group__dvgeneral.html#ga7cb62dd4a0904dd068fb07a6b3ff8fe5", null ],
     [ "dvSetHeaderCb", "group__dvgeneral.html#ga13fea75e53e6c0e9db771b2d36b8f1f4", null ],
     [ "dvSetPostCb", "group__dvgeneral.html#gaaa640880e6e7f700af67988f96eeff3f", null ],
     [ "dvSetProp", "group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf", null ],
-    [ "dvVersion", "group__dvgeneral.html#ga652eb8a2b73333afeb6469c2465f3901", null ]
+    [ "dvVersion", "group__dvgeneral.html#gaa7175c1e3629531ab494d44a22ba16ff", null ]
 ];

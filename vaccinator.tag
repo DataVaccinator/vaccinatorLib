@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile>
+<tagfile doxygen_version="1.9.1">
   <compound kind="group">
     <name>glos</name>
     <title>Glossary</title>
@@ -288,18 +288,18 @@
       <arglist>(dvCtx dc, dvPostCb callback, void *cbCtx)</arglist>
     </member>
     <member kind="function">
-      <type>const DVAPI char *</type>
+      <type>DVAPI const char *</type>
       <name>dvVersion</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>ga652eb8a2b73333afeb6469c2465f3901</anchor>
+      <anchor>gaa7175c1e3629531ab494d44a22ba16ff</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>DVAPI void</type>
       <name>dvSetCleanLogger</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>gad77377de34ba943ab4313b50ec565ef3</anchor>
-      <arglist>(ruLogFunc logger, u_int32_t logLevel, void *userData)</arglist>
+      <anchor>ga7cb62dd4a0904dd068fb07a6b3ff8fe5</anchor>
+      <arglist>(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData)</arglist>
     </member>
     <member kind="function">
       <type>DVAPI int</type>
@@ -309,10 +309,10 @@
       <arglist>(dvCtx dc, enum dvCtxOpt opt, const char *value)</arglist>
     </member>
     <member kind="function">
-      <type>const DVAPI char *</type>
+      <type>DVAPI const char *</type>
       <name>dvLastError</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>ga04cac59ca883f1446b009f7d51ccdbc9</anchor>
+      <anchor>ga47209f4347d064effde208daec48238f</anchor>
       <arglist>()</arglist>
     </member>
   </compound>
@@ -359,7 +359,7 @@
   <compound kind="page">
     <name>index</name>
     <title></title>
-    <filename>index</filename>
+    <filename>index.html</filename>
     <docanchor file="index.html" title="Introduction">dvintro</docanchor>
     <docanchor file="index.html" title="Data Specification">payload</docanchor>
     <docanchor file="index.html" title="Example Usage">usage</docanchor>

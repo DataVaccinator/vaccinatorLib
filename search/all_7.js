@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['iofunc_59',['ioFunc',['https://regify.github.io/regify-util/group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1',1,]]]
+  ['hash_20map_63',['Hash Map',['https://regify.github.io/regify-util/group__map.html',1,'']]],
+  ['hash_20set_64',['Hash Set',['https://regify.github.io/regify-util/group__set.html',1,'']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ctx_2',['ctx',['https://regify.github.io/regify-util/struct_kv_store__.html#a1f6d09b30c54854dfca659b7463ac207',1,'ruBuffer']]]
+  ['buffer_20functions_4',['Buffer Functions',['https://regify.github.io/regify-util/group__buffer.html',1,'']]],
+  ['buffer_20object_5',['Buffer Object',['https://regify.github.io/regify-util/group__ru_buffer.html',1,'']]]
 ];

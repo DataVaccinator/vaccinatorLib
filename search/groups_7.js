@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['list_20collection_475',['List Collection',['https://regify.github.io/regify-util/group__list.html',1,'']]],
-  ['logging_20facility_476',['Logging Facility',['https://regify.github.io/regify-util/group__logging.html',1,'']]]
+  ['key_20value_20storage_745',['Key Value Storage',['https://regify.github.io/regify-util/group__kvstore__sec.html',1,'']]]
 ];
