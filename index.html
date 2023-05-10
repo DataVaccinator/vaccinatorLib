@@ -130,7 +130,7 @@ Example Usage</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// The performance of this logger is inadequate for production usage.</span></div>
 <div class="line"><span class="comment">// It is merely here to showcase the callback usage.</span></div>
-<div class="line"><span class="keywordtype">void</span> myLogFunc (<span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">char</span> *message) {</div>
+<div class="line"><span class="keywordtype">void</span> myLogFunc (<span class="keyword">const</span> <span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">char</span> *message) {</div>
 <div class="line">    FILE *wh = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga3716b147f53dd26c805547556b9608be">ruFOpen</a>((<span class="keyword">const</span> <span class="keywordtype">char</span>*) user_data, <span class="stringliteral">&quot;a&quot;</span>, NULL);</div>
 <div class="line">    <span class="keywordflow">if</span> (wh) {</div>
 <div class="line">        fwrite(message, strlen(message), <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), wh);</div>
@@ -182,7 +182,7 @@ Example Usage</h2>
 <div class="line">            a1 = argv[1];</div>
 <div class="line">            <span class="comment">// -d turns on verbose debug logging</span></div>
 <div class="line">            <span class="comment">// -v turns on verbose debug logging with curl debug logging</span></div>
-<div class="line">            <span class="keywordflow">if</span> (ruStrcmp(a1, <span class="stringliteral">&quot;-v&quot;</span>) == 0 || ruStrcmp(a1, <span class="stringliteral">&quot;-d&quot;</span>) == 0) {</div>
+<div class="line">            <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(a1, <span class="stringliteral">&quot;-v&quot;</span>) == 0 || <a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(a1, <span class="stringliteral">&quot;-d&quot;</span>) == 0) {</div>
 <div class="line">                <span class="comment">// this logger is preferred over ruSetLogger</span></div>
 <div class="line">                <span class="comment">// because it sanitizes sensitive information out</span></div>
 <div class="line">                <a class="code" href="group__dvgeneral.html#ga7cb62dd4a0904dd068fb07a6b3ff8fe5">dvSetCleanLogger</a>(myLogFunc, <a class="codeRef" href="https://regify.github.io/regify-util/group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a>, (<span class="keywordtype">void</span>*)logfile);</div>
@@ -195,12 +195,12 @@ Example Usage</h2>
 <div class="line">        ret = <a class="code" href="group__dvgeneral.html#gaa569238d6383532ab3e56ff82195457a">dvNew</a>(&amp;dc, PROVIDER_URL, APPID, kvs);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        <span class="comment">// check for easy SSL mode</span></div>
-<div class="line">        <span class="keywordflow">if</span> (ruStrcmp(<span class="stringliteral">&quot;1&quot;</span>, ruGetenv(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(<span class="stringliteral">&quot;1&quot;</span>, ruGetenv(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
 <div class="line">            <span class="comment">// disable certificate checks</span></div>
 <div class="line">            ret = <a class="code" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a>(dc, <a class="code" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fadefbba382d201f196697b44487f8932c">DV_SKIP_CERT_CHECK</a>, <span class="stringliteral">&quot;1&quot;</span>);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
-<div class="line">        <span class="keywordflow">if</span> (ruStrcmp(a1, <span class="stringliteral">&quot;-v&quot;</span>) == 0) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(a1, <span class="stringliteral">&quot;-v&quot;</span>) == 0) {</div>
 <div class="line">            <span class="comment">// turn on curl debug logging</span></div>
 <div class="line">            ret = <a class="code" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a>(dc, <a class="code" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fa711b015868f7ab71a58e8444ceade44c">DV_CURL_LOGGING</a>, <span class="stringliteral">&quot;1&quot;</span>);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
@@ -238,7 +238,7 @@ Example Usage</h2>
 <div class="line">        ret = <a class="code" href="group__dvmain.html#ga0ec9b624e6f09b04d055d48270ff0600">dvGet</a>(dc, vids, &amp;data);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a> li = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(vids);</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = ruIterCurrent(li, <span class="keywordtype">char</span>*); li;</div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li;</div>
 <div class="line">            vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
 <div class="line">            ret = <a class="code" href="group__dvmain.html#ga4d4b918694b348de535c309e475eb95b">dvGetVid</a>(data, vd, &amp;out);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret == <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) {</div>
@@ -254,7 +254,7 @@ Example Usage</h2>
 <div class="line">        ret = <a class="code" href="group__dvmain.html#gadf8fd43e07b1a4f8c016980b5b2c7bfe">dvSearch</a>(dc, searchTerms, &amp;foundVids);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        li = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(foundVids);</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span>* vd = ruIterCurrent(li, <span class="keywordtype">char</span>*); li; vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span>* vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li; vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
 <div class="line">            printf(<span class="stringliteral">&quot;found vid: &#39;%s&#39;\n&quot;</span>, vd);</div>
 <div class="line">        }</div>
 <div class="line"> </div>
@@ -323,6 +323,7 @@ Example Usage</h2>
 <div class="ttc" id="agroup__map_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga616dba9a5dafed8351aa98c68fab25e2"><div class="ttname"><a href="https://regify.github.io/regify-util/group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a></div><div class="ttdeci">#define RUE_PARAMETER_NOT_SET</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div></div>
+<div class="ttc" id="agroup__string_html_gaf8c3433629ebca6c711a379ea72b70fe"><div class="ttname"><a href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a></div><div class="ttdeci">RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2)</div></div>
 <div class="ttc" id="astruct_kv_store___html"><div class="ttname"><a href="https://regify.github.io/regify-util/struct_kv_store__.html">KvStore_</a></div></div>
 </div><!-- fragment --></div></div><!-- PageDoc -->
 </div><!-- contents -->
@@ -330,7 +331,7 @@ Example Usage</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 10 2023 08:36:44 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed May 10 2023 09:34:53 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -152,7 +152,7 @@ Published payloads have different behavior:</h3>
 <div class="line">        <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// check for easy SSL mode</span></div>
-<div class="line">        <span class="keywordflow">if</span> (ruStrcmp(<span class="stringliteral">&quot;1&quot;</span>, ruGetenv(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(<span class="stringliteral">&quot;1&quot;</span>, ruGetenv(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
 <div class="line">            <span class="comment">// disable certificate checks</span></div>
 <div class="line">            ret = <a class="code" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a>(dc, <a class="code" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fadefbba382d201f196697b44487f8932c">DV_SKIP_CERT_CHECK</a>, <span class="stringliteral">&quot;1&quot;</span>);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
@@ -172,7 +172,7 @@ Published payloads have different behavior:</h3>
 <div class="line">        <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
 <div class="line">        <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a> li = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(vids);</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = ruIterCurrent(li, <span class="keywordtype">char</span>*); li;</div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li;</div>
 <div class="line">            vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
 <div class="line">            ret = <a class="code" href="group__dvmain.html#ga4d4b918694b348de535c309e475eb95b">dvGetVid</a>(data, vd, &amp;out);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
@@ -207,6 +207,7 @@ Published payloads have different behavior:</h3>
 <div class="ttc" id="agroup__map_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="https://regify.github.io/regify-util/group__map.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div></div>
 <div class="ttc" id="agroup__map_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div></div>
+<div class="ttc" id="agroup__string_html_gaf8c3433629ebca6c711a379ea72b70fe"><div class="ttname"><a href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a></div><div class="ttdeci">RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2)</div></div>
 </div><!-- fragment --><h2 class="groupheader">Function Documentation</h2>
 <a id="ga139e8e1a3239cd14002b01c02e4490d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga139e8e1a3239cd14002b01c02e4490d3">&#9670;&nbsp;</a></span>dvGetPublished()</h2>
@@ -320,7 +321,7 @@ Published payloads have different behavior:</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 10 2023 08:36:44 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed May 10 2023 09:34:53 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
