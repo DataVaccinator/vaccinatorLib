@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 # options
-set(VERSION 1.0.0 CACHE STRING "The version")
+set(VERSION 1.1.0 CACHE STRING "The version")
 set(REVISION 0 CACHE STRING "The revision")
 set(DEPS_BASE ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
 set(MBEDTLS_BASE ${DEPS_BASE} CACHE STRING "Mbed TLS installation prefix")
