@@ -63,7 +63,7 @@ int main ( int argc, char **argv ) {
         ret = dvNew(&dc, PROVIDER_URL, oldId, NULL);
         if (ret != RUE_OK) break;
         // check for easy SSL mode
-        if (ruStrcmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
             // disable certificate checks
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
             if (ret) break;
@@ -102,7 +102,7 @@ int main ( int argc, char **argv ) {
         // verify results
         bool hasErrors = false;
         ruIterator li = ruListIter(vids);
-        for(char *out, *vd = ruIterCurrent(li, char*); li;
+        for(char *out, *vd = ruIterNext(li, char*); li;
             vd = ruIterNext(li, char*)) {
             ret = dvGetVid(vidMap, vd, &out);
             if (ret == DVE_INVALID_CREDENTIALS) {

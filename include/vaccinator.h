@@ -603,14 +603,14 @@ DVAPI const char* dvVersion();
  * @param userData Opaque custom user data that will be passed to the
  *                 \ref ruLogFunc implementation.
  */
-DVAPI void dvSetCleanLogger(ruLogFunc logger, u_int32_t logLevel, void* userData);
+DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, void* userData);
 
 /**
  * \brief Constants used to set \ref dvclient context parameters.
  */
 enum dvCtxOpt {
     /** Proxy URL in the form of protocol://hostname:port */
-    DV_PROXY = (u_int32_t)57, /* force integer size */
+    DV_PROXY = (uint32_t)57, /* force integer size */
     /** Proxy username */
     DV_PROXY_USER,
     /** Proxy password */

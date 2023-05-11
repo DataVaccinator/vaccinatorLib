@@ -115,7 +115,7 @@ static ruCleaner dvGetCleaner() {
     return pwCleaner_;
 }
 
-static rusize_s pcWriter (void *ctx, void *buf, rusize len) {
+static rusize_s pcWriter (const void *ctx, const void *buf, rusize len) {
     if (logger_) {
         ((char*)buf)[len] = '\0';
         logger_(userLogData_, buf);
@@ -123,7 +123,7 @@ static rusize_s pcWriter (void *ctx, void *buf, rusize len) {
     return (rusize_s)len;
 }
 
-static rusize_s pcReader (void *msg, void *buf, rusize len) {
+static rusize_s pcReader (const void *msg, void *buf, rusize len) {
     if (!msg) return 0;
     rusize sz = strlen(msg) + 1;
     if (sz > len) sz = len;
@@ -131,7 +131,7 @@ static rusize_s pcReader (void *msg, void *buf, rusize len) {
     return (rusize_s)sz;
 }
 
-static void dvCleanLogger(void *ctx, const char *message) {
+static void dvCleanLogger(const void *ctx, const char *message) {
     ruCleaner pc = dvGetCleaner();
     ruCleanIo(pc, &pcReader, (void*)message, &pcWriter, NULL);
 }
@@ -144,7 +144,7 @@ void dvCleanerAdd(const char* secret) {
     }
 }
 
-DVAPI void dvSetCleanLogger(ruLogFunc logger, u_int32_t logLevel, void* userData) {
+DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, void* userData) {
     logger_ = logger;
     userLogData_ = userData;
     if (logger_) {

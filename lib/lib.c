@@ -38,7 +38,7 @@ const char* myVersion = DV_BUILD_VERSION;
 static int32_t setServiceUrl(dvctx ctx, const char* providerUrl) {
     ruFree(ctx->serviceUrl);
     if (providerUrl && strlen(providerUrl) > 0) {
-        ctx->serviceUrl = ruStrdup(providerUrl);
+        ctx->serviceUrl = ruStrDup(providerUrl);
         if (ruStrEndsWith(ctx->serviceUrl, "/", NULL)) {
             // snip the trailing /
             *(ctx->serviceUrl + strlen(ctx->serviceUrl)-1) = '\0';
@@ -71,7 +71,7 @@ static int32_t encodeWordList(ruList wordLst, ruString json, const char* key) {
         dvSetError("Failed getting indexWords iterator ec:%d", ret);
         return ret;
     }
-    for (char* word = ruIterCurrent(li, char*); word;
+    for (char* word = ruIterNext(li, char*); word;
          word = ruIterNext(li, char*)) {
         ruFree(jword);
         jsonEncodeString(word, &jword);
@@ -214,7 +214,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
             dvSetError("Failed getting vid list iterator. ec: %d", ret);
             break;
         }
-        for (char* vid = ruIterCurrent(li, char*); vid;
+        for (char* vid = ruIterNext(li, char*); vid;
              vid = ruIterNext(li, char*)) {
             char* dt = NULL;
             rusize len = 0;
@@ -227,7 +227,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
                 continue;
             }
             // we have it
-            ret = ruMapPut(*data, ruStrdup(vid),
+            ret = ruMapPut(*data, ruStrDup(vid),
                            newGetRes(dt, RUE_OK));
             if (ret != RUE_OK) {
                 ruCritLogf("failed adding entry '%s' to map", vid);
@@ -399,7 +399,7 @@ DVAPI int32_t dvNew(dvCtx* dc, const char* serviceUrl, const char* appId,
         if (ret != RUE_OK) break;
 
         if (appId) {
-            ctx->appId = ruStrdup(appId);
+            ctx->appId = ruStrDup(appId);
             ret = mkKey(ctx->appId, ctx->key, &ctx->appIdEnd);
             if (ret) break;
             dvCleanerAdd(ctx->appId);
@@ -624,7 +624,7 @@ DVAPI int32_t dvWipe(dvCtx dc, ruList vids) {
     }
 
     ruIterator li = ruListIter(myvids);
-    for (char* vid = ruIterCurrent(li, char*); vid;
+    for (char* vid = ruIterNext(li, char*); vid;
          vid = ruIterNext(li, char*)) {
         ret = ctx->store->set(ctx->store, vid, NULL, 0);
         if (ret != RUE_OK) {
@@ -662,7 +662,7 @@ DVAPI int32_t dvChangeAppId(dvCtx dc, const char* newId, ruList vids,
             break;
         }
         ruIterator li = ruListIter(vids);
-        for (char *vd = ruIterCurrent(li, char*); li; vd = ruIterNext(li, char*)) {
+        for (char *vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*)) {
             if (!ruMapHas(*vidMap, vd, NULL)) {
                 dvSetError("No entry for vid '%s'", vd);
                 ret = DVE_PROTOCOL_ERROR;
@@ -677,7 +677,7 @@ DVAPI int32_t dvChangeAppId(dvCtx dc, const char* newId, ruList vids,
             }
             if (gr->status == DVE_INVALID_CREDENTIALS) {
                 // we know it didn't match the old checksum
-                if (ruStrcmp(newCs, gr->data) == 0) {
+                if (ruStrCmp(newCs, gr->data) == 0) {
                     // if it matched the new checksum then it's already handled
                     ruVerbLogf("Entry '%s' has already been migrated", vd);
                     gr->status = RUE_OK;
@@ -751,17 +751,17 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
         case DV_PROXY:
             ruFree(ctx->proxy);
             if (value)
-                ctx->proxy = ruStrdup(value);
+                ctx->proxy = ruStrDup(value);
             break;
         case DV_PROXY_USER:
             ruFree(ctx->proxyUser);
             if (value)
-                ctx->proxyUser = ruStrdup(value);
+                ctx->proxyUser = ruStrDup(value);
             break;
         case DV_PROXY_PASS:
             ruFree(ctx->proxyPass);
             if (value) {
-                ctx->proxyPass = ruStrdup(value);
+                ctx->proxyPass = ruStrDup(value);
                 dvCleanerAdd(value);
             }
             break;
@@ -772,7 +772,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             ruFree(ctx->appId);
             ctx->appIdEnd = NULL;
             if (value) {
-                ctx->appId = ruStrdup(value);
+                ctx->appId = ruStrDup(value);
                 ret = mkKey(ctx->appId, ctx->key, &ctx->appIdEnd);
                 if (ret) break;
                 dvCleanerAdd(ctx->appId);
@@ -788,7 +788,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             if (!value) {
                 ctx->appName = (char*)myName;
             } else {
-                ctx->appName = ruStrdup(value);
+                ctx->appName = ruStrDup(value);
             }
             break;
         case DV_APPVERSION:
@@ -796,7 +796,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             if (!value) {
                 ctx->appVersion = (char*)myVersion;
             } else {
-                ctx->appVersion = ruStrdup(value);
+                ctx->appVersion = ruStrDup(value);
             }
             break;
         case DV_CERT_PATH:
@@ -805,17 +805,17 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             }
             ruFree(ctx->certPath);
             if (value)
-                ctx->certPath = ruStrdup(value);
+                ctx->certPath = ruStrDup(value);
             break;
         case DV_SECRET_PLACE_HOLDER:
             ruFree(dvPwReplacement);
-            dvPwReplacement = ruStrdup(value);
+            dvPwReplacement = ruStrDup(value);
             break;
         case DV_SECRET:
             dvCleanerAdd(value);
             break;
         case DV_SKIP_CERT_CHECK:
-            if (!value || ruStrcmp(value, "0") == 0) {
+            if (!value || ruStrCmp(value, "0") == 0) {
                 ruVerbLog("Enabling certificate verification");
                 ctx->skipCertCheck = false;
             } else {
@@ -824,7 +824,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             }
             break;
         case DV_CURL_LOGGING:
-            if (!value || ruStrcmp(value, "0") == 0) {
+            if (!value || ruStrCmp(value, "0") == 0) {
                 ruVerbLog("Disabling curl logging");
                 ctx->curlDebug = false;
             } else {

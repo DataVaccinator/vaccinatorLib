@@ -76,7 +76,7 @@ typedef struct dv_kvList *dvKvList;
  */
 #define dvctxType 0x21ff11ff
 struct dv_ctx {
-    u_int32_t type;     /* magic identification number (ptr type check)*/
+    uint32_t type;     /* magic identification number (ptr type check)*/
     char *serviceUrl;
     char *appId;        /* the app-id */
     char *appIdEnd;     /* the last 2 chars of the appId, the checksum part. */
@@ -131,7 +131,7 @@ struct dv_hdr_ctx {
  */
 #define dvKvListType 0x21ff44ff
 struct dv_kvList {
-    u_int32_t type;           /* magic identification number (ptr type check)*/
+    uint32_t type;           /* magic identification number (ptr type check)*/
     char *key;
     char *val;
     rusize len;

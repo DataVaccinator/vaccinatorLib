@@ -540,7 +540,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             break;
         }
         // split it
-        rPieces = ruStrsplit(cipherRecipe, ":", 5);
+        rPieces = ruStrSplit(cipherRecipe, ":", 5);
         if (!rPieces) {
             dvSetError("failed splitting recipe '%s'", cipherRecipe);
             ret = DVE_PROTOCOL_ERROR;
@@ -573,7 +573,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             dvSetError("failed getting codec from recipe ec:%d", ret);
             break;
         }
-        if (ruStrcmp(codec, "b") != 0) {
+        if (ruStrCmp(codec, "b") != 0) {
             dvSetError("invalid codec '%s' in recipe", codec);
             ret = DVE_PROTOCOL_ERROR;
             break;
