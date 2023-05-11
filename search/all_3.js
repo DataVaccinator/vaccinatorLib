@@ -40,7 +40,7 @@ var searchData=
   ['dvpostcb_44',['dvPostCb',['../group__dvgeneral.html#gaa1d2a8effa4d10ae3ca38d95271ac55c',1,'vaccinator.h']]],
   ['dvpublish_45',['dvPublish',['../group__dvpublish.html#gad608e74c9863c749fae3472172651265',1,'vaccinator.h']]],
   ['dvsearch_46',['dvSearch',['../group__dvmain.html#gadf8fd43e07b1a4f8c016980b5b2c7bfe',1,'vaccinator.h']]],
-  ['dvsetcleanlogger_47',['dvSetCleanLogger',['../group__dvgeneral.html#ga7cb62dd4a0904dd068fb07a6b3ff8fe5',1,'vaccinator.h']]],
+  ['dvsetcleanlogger_47',['dvSetCleanLogger',['../group__dvgeneral.html#gaf27b3954e334fe85fde4f063e13dd65c',1,'vaccinator.h']]],
   ['dvsetheadercb_48',['dvSetHeaderCb',['../group__dvgeneral.html#ga13fea75e53e6c0e9db771b2d36b8f1f4',1,'vaccinator.h']]],
   ['dvsetheaderfn_49',['dvSetHeaderFn',['../group__dvgeneral.html#ga04129067ed3fc1c71898b939fe4018c7',1,'vaccinator.h']]],
   ['dvsetpostcb_50',['dvSetPostCb',['../group__dvgeneral.html#gaaa640880e6e7f700af67988f96eeff3f',1,'vaccinator.h']]],

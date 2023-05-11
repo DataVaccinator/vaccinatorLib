@@ -298,8 +298,8 @@
       <type>DVAPI void</type>
       <name>dvSetCleanLogger</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>ga7cb62dd4a0904dd068fb07a6b3ff8fe5</anchor>
-      <arglist>(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData)</arglist>
+      <anchor>gaf27b3954e334fe85fde4f063e13dd65c</anchor>
+      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</arglist>
     </member>
     <member kind="function">
       <type>DVAPI int</type>
