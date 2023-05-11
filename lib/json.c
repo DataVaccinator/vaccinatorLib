@@ -106,7 +106,7 @@ int32_t parseStatus(yajl_val node, bool* invalidRequest) {
         return DVE_PROTOCOL_ERROR;
     }
     nodeValue = YAJL_GET_STRING(v);
-    if (ruStrCmp(STATUS_OK, nodeValue) == 0) {
+    if (ruStrEquals(STATUS_OK, nodeValue)) {
         // status: OK
         return RUE_OK;
     }
@@ -127,12 +127,12 @@ int32_t parseStatus(yajl_val node, bool* invalidRequest) {
         char *desc = YAJL_GET_STRING(v);
         dvSetError(desc);
     }
-    if (ruStrCmp(STATUS_INVALID, nodeValue) == 0) {
+    if (ruStrEquals(STATUS_INVALID, nodeValue)) {
         ruVerbLogf("status was invalid. EC: %d", ret);
         if (invalidRequest) *invalidRequest = true;
         return ret;
     }
-    if (ruStrCmp(STATUS_ERROR, nodeValue) != 0) {
+    if (ruStrEquals(STATUS_ERROR, nodeValue)) {
         ruCritLogf("status was of unknown type: '%s'", nodeValue);
     }
     return ret;
@@ -176,7 +176,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
         }
 
         nodeValue = YAJL_GET_STRING(v);
-        if (ruStrCmp(STATUS_NOT_FOUND, nodeValue) == 0) {
+        if (ruStrEquals(STATUS_NOT_FOUND, nodeValue)) {
             ruVerbLogf("status for entry '%s' id not found", vid);
             ret = ruMapPut(*data, ruStrDup(vid),
                            newGetRes(NULL, RUE_FILE_NOT_FOUND));
@@ -186,7 +186,7 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
             }
             continue;
         }
-        if (ruStrCmp(STATUS_OK, nodeValue) != 0) {
+        if (!ruStrEquals(STATUS_OK, nodeValue)) {
             ruWarnLogf("status for entry '%s' was '%s'", vid, nodeValue);
             ret = DVE_PROTOCOL_ERROR;
             break;

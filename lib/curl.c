@@ -50,7 +50,7 @@ int32_t addKv(dvKvList kvl, const char* key, const char* value, rusize len) {
     /* go through the list to a match or the end */
     l = kvl;
     while (true) {
-        if (ruStrCmp(l->key, key) == 0) {
+        if (ruStrEquals(l->key, key)) {
             // matched, replace existing
             ruFree(l->val);
             setKvListValue(l, value, len);

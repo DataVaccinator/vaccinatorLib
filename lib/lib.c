@@ -677,7 +677,7 @@ DVAPI int32_t dvChangeAppId(dvCtx dc, const char* newId, ruList vids,
             }
             if (gr->status == DVE_INVALID_CREDENTIALS) {
                 // we know it didn't match the old checksum
-                if (ruStrCmp(newCs, gr->data) == 0) {
+                if (ruStrEquals(newCs, gr->data)) {
                     // if it matched the new checksum then it's already handled
                     ruVerbLogf("Entry '%s' has already been migrated", vd);
                     gr->status = RUE_OK;
@@ -815,7 +815,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             dvCleanerAdd(value);
             break;
         case DV_SKIP_CERT_CHECK:
-            if (!value || ruStrCmp(value, "0") == 0) {
+            if (!value || ruStrEquals(value, "0")) {
                 ruVerbLog("Enabling certificate verification");
                 ctx->skipCertCheck = false;
             } else {
@@ -824,7 +824,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             }
             break;
         case DV_CURL_LOGGING:
-            if (!value || ruStrCmp(value, "0") == 0) {
+            if (!value || ruStrEquals(value, "0")) {
                 ruVerbLog("Disabling curl logging");
                 ctx->curlDebug = false;
             } else {

@@ -573,7 +573,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             dvSetError("failed getting codec from recipe ec:%d", ret);
             break;
         }
-        if (ruStrCmp(codec, "b") != 0) {
+        if (!ruStrEquals(codec, "b")) {
             dvSetError("invalid codec '%s' in recipe", codec);
             ret = DVE_PROTOCOL_ERROR;
             break;

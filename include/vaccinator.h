@@ -603,7 +603,7 @@ DVAPI const char* dvVersion();
  * @param userData Opaque custom user data that will be passed to the
  *                 \ref ruLogFunc implementation.
  */
-DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, void* userData);
+DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData);
 
 /**
  * \brief Constants used to set \ref dvclient context parameters.
