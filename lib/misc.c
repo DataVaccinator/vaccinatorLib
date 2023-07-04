@@ -64,7 +64,7 @@ void dvSetError(const char *format, ...) {
     ruCritLog(dvError);
 }
 
-DVAPI const char* dvLastError() {
+DVAPI const char* dvLastError(void) {
     if (!dvErrInit) {
         dvError[0] = '\0';
         dvErrInit = 1;
@@ -79,11 +79,11 @@ dvGetRes newGetRes(char* data, int32_t status) {
     return out;
 }
 
-void freeGetRes(void* in) {
+ptr freeGetRes(ptr in) {
     dvGetRes gr = (dvGetRes) in;
-    if (!gr) return;
+    if (!gr) return NULL;
     ruFree(gr->data);
-    ruFree(gr);
+    return ruClear(gr);
 }
 
 DVAPI int32_t dvGetVid(ruMap vidMap, const char* vid, char** pid) {

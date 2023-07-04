@@ -110,7 +110,7 @@ START_TEST ( run ) {
         verifyCacheSize(kvs, 2);
 
         // populate our request list
-        vids = ruListNew(NULL);
+        vids = ruListNewType(NULL);
         test = "ruListAppend";
         ret = ruListAppend(vids, fovid);
         fail_unless(exp == ret, retText, test, exp, ret);
@@ -128,7 +128,7 @@ START_TEST ( run ) {
         data = verifyMapSize(data);
 
         // remove fovid from cache
-        fovids = ruListNew(NULL);
+        fovids = ruListNewType(NULL);
         test = "ruListAppend";
         ret = ruListAppend(fovids, fovid);
         fail_unless(exp == ret, retText, test, exp, ret);

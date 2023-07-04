@@ -67,7 +67,7 @@ START_TEST ( api ) {
 
         // test search API
         exp = RUE_OK;
-        vids = ruListNew(NULL);
+        vids = ruListNewType(NULL);
         ret = dvChangeAppId(dc, APPID, vids, &vidMap,
                             NULL, APPID);
         fail_unless(exp == ret, retText, test, exp, ret);
@@ -203,7 +203,7 @@ void getdata(dvCtx dc, const char* vid, const char* pid) {
     const char *retText = "%s failed wanted ret %d but got %d";
     ruMap vidMap = NULL;
 
-    ruList fovids = ruListNew(NULL);
+    ruList fovids = ruListNewType(NULL);
     test = "ruListAppend";
     ret = ruListAppend(fovids, vid);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -249,7 +249,7 @@ START_TEST ( change ) {
     }
     // -----------------------------------------------------------------
     // bad one in the middle
-    vids = ruListNew(NULL);
+    vids = ruListNewType(NULL);
     // add data
     fovid = addData(dc, oldId, foo, __LINE__);
     ret = ruListAppend(vids, fovid);
@@ -291,7 +291,7 @@ START_TEST ( change ) {
     ret = dvSetProp(dc, DV_APP_ID, oldId);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    vids = ruListNew(NULL);
+    vids = ruListNewType(NULL);
 
     // add data
     fovid = addData(dc, oldId, foo, __LINE__);
@@ -339,7 +339,7 @@ START_TEST ( change ) {
     ret = dvSetProp(dc, DV_APP_ID, oldId);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    vids = ruListNew(NULL);
+    vids = ruListNewType(NULL);
 
     // add data
     fovid = addData(dc, oldId, foo, __LINE__);

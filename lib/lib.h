@@ -80,7 +80,7 @@ struct dv_ctx {
     char *serviceUrl;
     char *appId;        /* the app-id */
     char *appIdEnd;     /* the last 2 chars of the appId, the checksum part. */
-    uchar key[32];      /* the encryption key derived from appId */
+    uint8_t key[32];      /* the encryption key derived from appId */
 
     // storage
     KvStore *store;     /* Where cached data will be stored. */
@@ -147,8 +147,8 @@ int32_t doRequest(dvctx ctx, const char *url, dvKvList postData, char **result,
 // misc.c
 dvctx getDvCtx(dvCtx pCtx);
 dvGetRes newGetRes(char* data, int32_t status);
-void freeGetRes(void* in);
-void dvClearError();
+ptr freeGetRes(ptr in);
+void dvClearError(void);
 void dvSetError(const char *format, ...);
 void dvCleanerAdd(const char *secret);
 
@@ -157,17 +157,17 @@ yajl_val getJson(const char *json);
 int32_t jsonEncodeString(const char *input, char **output);
 int32_t parseString(yajl_val node, const char *key, char **value);
 int32_t parseStatus(yajl_val node, bool *invalidRequest);
-int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
+int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
                      ruMap *data);
 int32_t parseSearchData(yajl_val node, ruList *vids);
 
 // crypto.c
 int32_t dvSearchHash(const char* term, const char* key, char** hash, bool indexing);
 int32_t getCs(const char* appId, rusize idLen, char** csStart);
-int32_t mkKey(const char* appId, uchar* key, char** csStart);
-int32_t dvAes256Enc(const uchar* key, const char* cs, const char* str,
+int32_t mkKey(const char* appId, alloc_bytes key, char** csStart);
+int32_t dvAes256Enc(trans_bytes key, const char* cs, const char* str,
                     char** cipherText);
-int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, char* cs);
+int32_t dvAes256Dec(trans_bytes key, const char* cipherRecipe, char** data, char* cs);
 
 #ifdef __cplusplus
 }   /* extern "C" */

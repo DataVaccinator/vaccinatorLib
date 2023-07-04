@@ -69,7 +69,7 @@ int main ( int argc, char **argv ) {
             if (ret) break;
         }
 
-        vids = ruListNew(NULL);
+        vids = ruListNewType(NULL);
 
         // since we have a search callback let's use it to make our search term
         ret = indexCb((void *) oldId, NULL, name, &indexTerms);

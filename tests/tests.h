@@ -45,10 +45,10 @@
 #include "../lib/lib.h"
 
 // crypto.c
-void hexify(const uchar *ibuf, int ilen, uchar *obuf);
+void hexify(trans_bytes ibuf, int ilen, alloc_bytes obuf);
 int32_t getIv();
 int32_t dvSha256(const char* str, char** hash);
-void getPaddedEnd(const char* str, uchar* last, rusize lastLen);
+void getPaddedEnd(const char* str, alloc_bytes last, rusize lastLen);
 
 
 

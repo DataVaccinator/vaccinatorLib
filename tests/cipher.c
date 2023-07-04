@@ -37,8 +37,8 @@ START_TEST ( run ) {
     ruFree(out);
 
     #define cipherBufLen 64
-    uchar cipher[cipherBufLen];
-    uchar hex[cipherBufLen * 2];
+    uint8_t cipher[cipherBufLen];
+    uint8_t hex[cipherBufLen * 2];
 
     // pkcs#7 padding
     const char* str = "";
@@ -65,7 +65,7 @@ START_TEST ( run ) {
 
     // post normal
     const char* appId = APPID;
-    uchar key[32];
+    uint8_t key[32];
     char* cs = NULL;
     test = "mkKey";
     ret = mkKey(appId, key, &cs);

@@ -24,7 +24,7 @@
 int32_t jsonEncodeString(const char*input, char** output) {
     yajl_gen g;
     int stat;
-    const uchar* buf;
+    perm_bytes buf;
     rusize olen;
     int32_t ret;
 
@@ -42,7 +42,7 @@ int32_t jsonEncodeString(const char*input, char** output) {
             ret = RUE_GENERAL;
             break;
         }
-        stat = yajl_gen_string(g, (const uchar*)input,
+        stat = yajl_gen_string(g, (trans_bytes)input,
                                strlen(input));
         if (stat != yajl_status_ok) {
             ruCritLogf("Failed to generate string [%s]", input);
@@ -138,7 +138,7 @@ int32_t parseStatus(yajl_val node, bool* invalidRequest) {
     return ret;
 }
 
-int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
+int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
                      ruMap* data) {
     int32_t ret = RUE_OK;
     if (!node || !vids || !data) return RUE_PARAMETER_NOT_SET;
@@ -172,7 +172,8 @@ int32_t parseVidData(uchar* key, yajl_val node, ruList vids, bool recode,
         }
 
         if (!*data) {
-            *data = ruMapNewString(free, freeGetRes);
+            *data = ruMapNewType(ruTypeStrFree(),
+                                 ruTypePtr(freeGetRes));
         }
 
         nodeValue = YAJL_GET_STRING(v);
@@ -260,7 +261,7 @@ int32_t parseSearchData(yajl_val node, ruList* vids) {
             continue;
         }
         if (!*vids) {
-            *vids = ruListNew(free);
+            *vids = ruListNewType(ruTypeStrFree());
         }
         ret = ruListAppend(*vids, ruStrDup(YAJL_GET_STRING(vid)));
         if (ret != RUE_OK) {

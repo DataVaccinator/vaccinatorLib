@@ -103,9 +103,9 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
 
     const char *op = "add";
     int32_t ret;
-    uchar* key = ctx->key;
+    alloc_bytes key = ctx->key;
     char* cs = ctx->appIdEnd;
-    uchar pubkey[32];
+    uint8_t pubkey[32];
 
     // to free
     yajl_val node = NULL;
@@ -193,8 +193,8 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
     if (!ctx) return RUE_INVALID_PARAMETER;
 
     int32_t ret = RUE_OK;
-    uchar* key = ctx->key;
-    uchar pubkey[32];
+    alloc_bytes key = ctx->key;
+    uint8_t pubkey[32];
 
     // to free
     char *response = NULL;
@@ -205,7 +205,8 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
 
     do {
         if (!*data) {
-            *data = ruMapNewString(free, freeGetRes);
+            *data = ruMapNewType(ruTypeStrFree(),
+                                 ruTypePtr(freeGetRes));
         }
 
         // first check the cache
@@ -221,7 +222,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
             LOAD(ctx, vid, &dt, &len);
             if (!dt) {
                 if (!getvids) {
-                    getvids = ruListNew(NULL);
+                    getvids = ruListNewType(NULL);
                 }
                 ruListAppend(getvids, vid);
                 continue;
@@ -302,8 +303,8 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
     dvKvList kvl = NULL;
     yajl_val node = NULL;
     ruString json = NULL;
-    uchar mykey[32];
-    uchar *key = ctx->key;
+    uint8_t mykey[32];
+    alloc_bytes key = ctx->key;
     char *appIdEnd = ctx->appIdEnd;
 
     do {
@@ -460,7 +461,7 @@ static int32_t addSearchWord(ruList* indexWords, const char* appId,
         if (ret != RUE_OK) break;
 
         if (!*indexWords) {
-            *indexWords = ruListNew(&free);
+            *indexWords = ruListNewType(ruTypeStrFree());
         }
         ruVerbLogf("Adding term:'%s' for word:'%s' with appid:'%s'",
                    term, word, appId);

@@ -26,9 +26,9 @@
 #include <mbedtls/md.h>
 #include <mbedtls/sha256.h>
 
-void getPaddedEnd(const char* str, uchar* last, rusize lastLen);
+void getPaddedEnd(const char* str, alloc_bytes last, rusize lastLen);
 
-static int32_t ascii2uc (const char c, uchar *uc) {
+static int32_t ascii2uc (const char c, alloc_bytes uc) {
     if( ( c >= '0' ) && ( c <= '9' ) )
         *uc = c - '0';
     else if( ( c >= 'a' ) && ( c <= 'f' ) )
@@ -41,8 +41,8 @@ static int32_t ascii2uc (const char c, uchar *uc) {
 }
 
 static int32_t unhexify(const char *str, size_t *neededLen,
-                        size_t oLen, uchar *oPtr) {
-    uchar uc, uc2;
+                        size_t oLen, alloc_bytes oPtr) {
+    uint8_t uc, uc2;
     int32_t ret;
     *neededLen = strlen(str );
 
@@ -68,11 +68,11 @@ static int32_t unhexify(const char *str, size_t *neededLen,
     return RUE_OK;
 }
 
-static int sha256(const char* str, rusize len, uchar* digest) {
-    return mbedtls_sha256((uchar*)str, len, digest,0);
+static int sha256(const char* str, rusize len, alloc_bytes digest) {
+    return mbedtls_sha256((alloc_bytes)str, len, digest,0);
 }
 
-static int32_t mkIv(uchar* iv, rusize len) {
+static int32_t mkIv(alloc_bytes iv, rusize len) {
     if (len < BLOCKSIZE) return RUE_OUT_OF_MEMORY;
     if (!iv) return RUE_PARAMETER_NOT_SET;
 
@@ -85,7 +85,7 @@ static int32_t mkIv(uchar* iv, rusize len) {
     #define seedLen 22
     char seed[seedLen];
     // just enough room here
-    uchar digest[MBEDTLS_MD_MAX_SIZE];
+    uint8_t digest[MBEDTLS_MD_MAX_SIZE];
 
     ruGetTimeVal(&now);
     threadcounter = (threadcounter + 1) % 1000;
@@ -93,7 +93,7 @@ static int32_t mkIv(uchar* iv, rusize len) {
              now.sec, now.usec, threadcounter);
 //    ruVerbLogf("seed: %s", seed);
 
-    int r = mbedtls_sha256((uchar*) seed, strlen(seed),
+    int r = mbedtls_sha256((alloc_bytes) seed, strlen(seed),
                            digest , 0);
     if (r) {
         dvSetError("Failed getting digest. PSA status: %d", r);
@@ -103,22 +103,22 @@ static int32_t mkIv(uchar* iv, rusize len) {
     return RUE_OK;
 }
 
-static int32_t dvB64Decode(const char* b64, uchar** data, rusize* len) {
+static int32_t dvB64Decode(const char* b64, alloc_bytes* data, rusize* len) {
     if (!b64 || !data || !len) return RUE_PARAMETER_NOT_SET;
 
     size_t dlen = 0, olen = 0, ilen = strlen(b64);
 
     int r = mbedtls_base64_decode(NULL, dlen, &olen,
-                                  (const uchar*)b64, ilen);
+                                  (trans_bytes)b64, ilen);
     if (r != MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL) {
         dvSetError("mbedtls_base64_decode returned %d instread of %d",
                    r, MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL);
         return RUE_GENERAL;
     }
     dlen = olen;
-    uchar* out = ruMalloc0(dlen, uchar);
-    r = mbedtls_base64_decode((uchar*)out, dlen, &olen,
-                              (const uchar*)b64, ilen);
+    alloc_bytes out = ruMalloc0(dlen, uint8_t);
+    r = mbedtls_base64_decode((alloc_bytes)out, dlen, &olen,
+                              (trans_bytes)b64, ilen);
     if (r) {
         dvSetError("mbedtls_base64_decode failed: %d", r);
         ruFree(out);
@@ -129,7 +129,7 @@ static int32_t dvB64Decode(const char* b64, uchar** data, rusize* len) {
     return RUE_OK;
 }
 
-static int32_t aesEnc(const uchar *key, const char* str, uchar* startIv, uchar* cipher,
+static int32_t aesEnc(trans_bytes key, const char* str, alloc_bytes startIv, alloc_bytes cipher,
                int32_t* outLen) {
     int32_t len = (int32_t)strlen(str);
     int32_t blocks = len / BLOCKSIZE;
@@ -138,9 +138,9 @@ static int32_t aesEnc(const uchar *key, const char* str, uchar* startIv, uchar* 
         *outLen = outsz;
         return RUE_OUT_OF_MEMORY;
     }
-    uchar mac[MACSIZE];
-    uchar iv[BLOCKSIZE];
-    uchar last[BLOCKSIZE];
+    uint8_t mac[MACSIZE];
+    uint8_t iv[BLOCKSIZE];
+    uint8_t last[BLOCKSIZE];
     mbedtls_aes_context ac;
 
     getPaddedEnd(str, last, sizeof(last));
@@ -150,7 +150,7 @@ static int32_t aesEnc(const uchar *key, const char* str, uchar* startIv, uchar* 
     if (r != RUE_OK) return r;
     memcpy(startIv, iv, BLOCKSIZE);
 
-    uchar *out = cipher;
+    alloc_bytes out = cipher;
     do {
         r = sha256(str, strlen(str), mac);
         if (r) {
@@ -169,7 +169,7 @@ static int32_t aesEnc(const uchar *key, const char* str, uchar* startIv, uchar* 
         }
         r = mbedtls_aes_crypt_cbc(&ac, MBEDTLS_AES_ENCRYPT,
                                   blocks * BLOCKSIZE, iv,
-                                  (const uchar*)str, out);
+                                  (trans_bytes)str, out);
         if (r) {
             dvSetError("Failed encrypting the payload. EC: %d", r);
             ret = RUE_GENERAL;
@@ -202,8 +202,8 @@ static int32_t aesEnc(const uchar *key, const char* str, uchar* startIv, uchar* 
     return ret;
 }
 
-static int32_t aesDec(const uchar *key, const uchar* cipher, rusize cipherLen,
-               uchar* startIv, char** text) {
+static int32_t aesDec(trans_bytes key, trans_bytes cipher, rusize cipherLen,
+               alloc_bytes startIv, char** text) {
 
     if (!key || !cipher || !cipherLen || !startIv || !text) {
         return RUE_PARAMETER_NOT_SET;
@@ -211,10 +211,10 @@ static int32_t aesDec(const uchar *key, const uchar* cipher, rusize cipherLen,
 
     int r, ret = RUE_GENERAL;
     mbedtls_aes_context ac;
-    uchar mac[MACSIZE];
+    uint8_t mac[MACSIZE];
 
     // free
-    uchar* out = NULL;
+    alloc_bytes out = NULL;
 
     do {
         // setup
@@ -226,7 +226,7 @@ static int32_t aesDec(const uchar *key, const uchar* cipher, rusize cipherLen,
             break;
         }
         // decrypt
-        out = ruMalloc0(cipherLen, uchar);
+        out = ruMalloc0(cipherLen, uint8_t);
         r = mbedtls_aes_crypt_cbc(&ac, MBEDTLS_AES_DECRYPT,
                                   cipherLen, startIv,
                                   cipher, out);
@@ -236,10 +236,10 @@ static int32_t aesDec(const uchar *key, const uchar* cipher, rusize cipherLen,
             break;
         }
         // get mac start
-        uchar* cmac = out + cipherLen - MACSIZE;
+        alloc_bytes cmac = out + cipherLen - MACSIZE;
         // strip padding
-        uchar* ptr = cmac-1;
-        uchar pad = *ptr;
+        alloc_bytes ptr = cmac-1;
+        uint8_t pad = *ptr;
         if (pad > 16) {
             dvSetError("Invalid padding after decryption");
             ret = DVE_INVALID_CREDENTIALS;
@@ -274,8 +274,8 @@ static int32_t aesDec(const uchar *key, const uchar* cipher, rusize cipherLen,
     return ret;
 }
 
-void hexify(const uchar *ibuf, int ilen, uchar *obuf) {
-    uchar l, h;
+void hexify(trans_bytes ibuf, int ilen, alloc_bytes obuf) {
+    uint8_t l, h;
 
     while(ilen != 0 ) {
         h = *ibuf / 16;
@@ -319,8 +319,8 @@ int32_t dvSearchHash(const char* word, const char* key, char** hash, bool indexi
     char *work = ruMalloc0(poolSz, char);
     // initial hash and running encoded hash
     char *sha = "f1748e9819664b324ae079a9ef22e33e9014ffce302561b9bf71a37916c1d2a3";
-    uchar sha2[32];
-    uchar encHash[65];
+    uint8_t sha2[32];
+    uint8_t encHash[65];
     memcpy((void*)&encHash[0], sha, 65);
 
     // term is padded to the next 16 byte boundary
@@ -342,11 +342,11 @@ int32_t dvSearchHash(const char* word, const char* key, char** hash, bool indexi
     rusize c = 0;
 
     do {
-        uchar digest[32];
+        uint8_t digest[32];
         // separating the character out to allow hashing \0
         *work = *ptr;
         snprintf(work2, poolSz2, "%s%s", &encHash[0], key);
-        if (d) ruVerbLogf("work: %x + '%s'", (uchar)*work, work2);
+        if (d) ruVerbLogf("work: %x + '%s'", (uint8_t)*work, work2);
         ret = sha256(work, poolSz, digest);
         if (ret) {
             dvSetError("Failed getting digest. PSA status: %d", ret);
@@ -357,7 +357,7 @@ int32_t dvSearchHash(const char* word, const char* key, char** hash, bool indexi
             // this is the first character so copy the digest for our random padding
             memcpy(sha2, digest, 32);
         }
-        hexify((const uchar *) &digest[0], 32, &encHash[0]);
+        hexify((trans_bytes) &digest[0], 32, &encHash[0]);
         encHash[64] = '\0';
         if (d) ruVerbLogf("hash: ' %s '", encHash);
         memcpy(optr, encHash, 2);
@@ -384,7 +384,7 @@ int32_t dvSearchHash(const char* word, const char* key, char** hash, bool indexi
 }
 
 int32_t dvSha256(const char* str, char** hash) {
-    uchar digest[32];
+    uint8_t digest[32];
     dvClearError();
     if (!str || !hash) return RUE_PARAMETER_NOT_SET;
 
@@ -394,7 +394,7 @@ int32_t dvSha256(const char* str, char** hash) {
         return RUE_GENERAL;
     }
     *hash = ruMalloc0(65, char);
-    hexify((const uchar *) &digest[0], 32, (uchar *) *hash);
+    hexify((trans_bytes) &digest[0], 32, (alloc_bytes ) *hash);
     return RUE_OK;
 }
 
@@ -418,7 +418,7 @@ int32_t getCs(const char* appId, rusize idLen, char** csStart) {
  *                address to stay valid.
  * @return RUE_OK on success
  */
-int32_t mkKey(const char* appId, uchar* key, char** csStart) {
+int32_t mkKey(const char* appId, alloc_bytes key, char** csStart) {
     if (!appId || !key) return RUE_PARAMETER_NOT_SET;
     rusize alen = strlen(appId);
     int r = sha256(appId, alen, key);
@@ -432,7 +432,7 @@ int32_t mkKey(const char* appId, uchar* key, char** csStart) {
     return RUE_OK;
 }
 
-void getPaddedEnd(const char* str, uchar* last, rusize lastLen) {
+void getPaddedEnd(const char* str, alloc_bytes last, rusize lastLen) {
     int32_t len = (int32_t)strlen(str);
     int32_t blocks = len / BLOCKSIZE;
     int32_t mod = len % BLOCKSIZE;
@@ -441,11 +441,11 @@ void getPaddedEnd(const char* str, uchar* last, rusize lastLen) {
     memcpy(last, str+(blocks*BLOCKSIZE), mod);
 }
 
-int32_t dvAes256Enc(const uchar* key, const char* cs, const char* str, char** cipherText) {
+int32_t dvAes256Enc(trans_bytes key, const char* cs, const char* str, char** cipherText) {
     int32_t ret, ciphsz = 0;
-    uchar iv[BLOCKSIZE];
+    uint8_t iv[BLOCKSIZE];
     // cipher bytes
-    uchar* cipher = NULL;
+    alloc_bytes cipher = NULL;
     // for cipherText
     char *out = NULL;
 
@@ -477,7 +477,7 @@ int32_t dvAes256Enc(const uchar* key, const char* cs, const char* str, char** ci
 
         // do it!
         // alloc cipher bytes
-        cipher = ruMalloc0(ciphsz, uchar);
+        cipher = ruMalloc0(ciphsz, uint8_t);
         ret = aesEnc(key, str, iv, cipher, &ciphsz);
         if (ret != RUE_OK) {
             break;
@@ -490,13 +490,13 @@ int32_t dvAes256Enc(const uchar* key, const char* cs, const char* str, char** ci
         sprintf(p, "aes-256-cbc:%s:", cs? cs : "");
         p += strlen(out);
         // iv
-        hexify((const uchar *) iv, BLOCKSIZE, (uchar *) p);
+        hexify((trans_bytes) iv, BLOCKSIZE, (alloc_bytes ) p);
         p += BLOCKSIZE*2;
         // :encoding:
         sprintf(p, ":b:");
         p += 3;
         // payload
-        ret = mbedtls_base64_encode((uchar*)p, dlen, &blen,
+        ret = mbedtls_base64_encode((alloc_bytes)p, dlen, &blen,
                                     cipher, ciphsz);
         if (ret) {
             dvSetError("mbedtls_base64_encode failed: %d", ret);
@@ -518,15 +518,15 @@ int32_t dvAes256Enc(const uchar* key, const char* cs, const char* str, char** ci
     return ret;
 }
 
-int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, char* cs) {
+int32_t dvAes256Dec(trans_bytes key, const char* cipherRecipe, char** data, char* cs) {
     int32_t ret = RUE_GENERAL;
-    uchar iv[BLOCKSIZE];
+    uint8_t iv[BLOCKSIZE];
 
     if (!key || !cipherRecipe || !data) return RUE_PARAMETER_NOT_SET;
 
     // free
     ruList rPieces = NULL;
-    uchar* cipher = NULL;
+    alloc_bytes cipher = NULL;
     char* msg = NULL;
 
     do {
@@ -548,7 +548,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
         }
         if (cs) {
             // get the checksum
-            char *checksum = ruListIdxData(rPieces, 1, char*, &ret);
+            char *checksum = ruListIdx(rPieces, 1, char*, &ret);
             if (ret != RUE_OK) {
                 dvSetError("failed getting cs from recipe ec:%d", ret);
                 break;
@@ -556,7 +556,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             memcpy(cs, checksum, 2);
         }
         // get the iv
-        char *hexIv = ruListIdxData(rPieces, 2, char*, &ret);
+        char *hexIv = ruListIdx(rPieces, 2, char*, &ret);
         if (ret != RUE_OK) {
             dvSetError("failed getting iv from recipe ec:%d", ret);
             break;
@@ -568,7 +568,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             break;
         }
         // get and verify the codec
-        char *codec = ruListIdxData(rPieces, 3, char*, &ret);
+        char *codec = ruListIdx(rPieces, 3, char*, &ret);
         if (ret != RUE_OK) {
             dvSetError("failed getting codec from recipe ec:%d", ret);
             break;
@@ -579,7 +579,7 @@ int32_t dvAes256Dec(const uchar* key, const char* cipherRecipe, char** data, cha
             break;
         }
         // decode
-        char* b64 = ruListIdxData(rPieces, 4, char*, &ret);
+        char* b64 = ruListIdx(rPieces, 4, char*, &ret);
         if (ret != RUE_OK) {
             dvSetError("failed getting payload from recipe ec:%d", ret);
             break;
