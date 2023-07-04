@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('group__dvpublish.html',''); initResiza
 Functions</h2></td></tr>
 <tr class="memitem:gad608e74c9863c749fae3472172651265"><td class="memItemLeft" align="right" valign="top">DVAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvpublish.html#gad608e74c9863c749fae3472172651265">dvPublish</a> (<a class="el" href="group__dvgeneral.html#gae4d6bb2909a269a91d4d20f20c5ed050">dvCtx</a> dc, const char *passwd, int durationDays, const char *data, char **vid)</td></tr>
 <tr class="separator:gad608e74c9863c749fae3472172651265"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga139e8e1a3239cd14002b01c02e4490d3"><td class="memItemLeft" align="right" valign="top">DVAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvpublish.html#ga139e8e1a3239cd14002b01c02e4490d3">dvGetPublished</a> (<a class="el" href="group__dvgeneral.html#gae4d6bb2909a269a91d4d20f20c5ed050">dvCtx</a> dc, const char *passwd, <a class="elRef" href="https://regify.github.io/regify-util/group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> vids, <a class="elRef" href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *vidMap)</td></tr>
+<tr class="memitem:ga139e8e1a3239cd14002b01c02e4490d3"><td class="memItemLeft" align="right" valign="top">DVAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvpublish.html#ga139e8e1a3239cd14002b01c02e4490d3">dvGetPublished</a> (<a class="el" href="group__dvgeneral.html#gae4d6bb2909a269a91d4d20f20c5ed050">dvCtx</a> dc, const char *passwd, <a class="elRef" href="https://regify.github.io/regify-util/group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> vids, <a class="elRef" href="https://regify.github.io/regify-util/group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *vidMap)</td></tr>
 <tr class="separator:ga139e8e1a3239cd14002b01c02e4490d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -144,7 +144,7 @@ Published payloads have different behavior:</h3>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> *name = <span class="stringliteral">&quot;John Doe&quot;</span>, *passwd = <span class="stringliteral">&quot;mysecret&quot;</span>;</div>
 <div class="line">    <span class="keywordtype">char</span> *namevid = NULL;</div>
 <div class="line">    <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> vids = NULL;</div>
-<div class="line">    <a class="codeRef" href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> data = NULL;</div>
+<div class="line">    <a class="codeRef" href="https://regify.github.io/regify-util/group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> data = NULL;</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">do</span> {</div>
 <div class="line">        <span class="comment">// setup</span></div>
@@ -152,7 +152,7 @@ Published payloads have different behavior:</h3>
 <div class="line">        <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// check for easy SSL mode</span></div>
-<div class="line">        <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(<span class="stringliteral">&quot;1&quot;</span>, ruGetenv(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="codeRef" href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a>(<span class="stringliteral">&quot;1&quot;</span>, <a class="codeRef" href="https://regify.github.io/regify-util/group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c">ruGetenv</a>(<span class="stringliteral">&quot;EASYSSL&quot;</span>)) == 0) {</div>
 <div class="line">            <span class="comment">// disable certificate checks</span></div>
 <div class="line">            ret = <a class="code" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a>(dc, <a class="code" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fadefbba382d201f196697b44487f8932c">DV_SKIP_CERT_CHECK</a>, <span class="stringliteral">&quot;1&quot;</span>);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
@@ -164,7 +164,7 @@ Published payloads have different behavior:</h3>
 <div class="line">        <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// retrieve data</span></div>
-<div class="line">        vids = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gaaa06a57ba6d6104137eb2092933deac6">ruListNew</a>(NULL);</div>
+<div class="line">        vids = ruListNewType(NULL);</div>
 <div class="line">        ret = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(vids, namevid);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
@@ -178,14 +178,14 @@ Published payloads have different behavior:</h3>
 <div class="line">            <span class="keywordflow">if</span> (ret != <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) <span class="keywordflow">break</span>;</div>
 <div class="line">            printf(<span class="stringliteral">&quot;pid for vid: &#39;%s&#39; is: &#39;%s&#39;\n&quot;</span>, vd, out);</div>
 <div class="line">        }</div>
-<div class="line">        <a class="codeRef" href="https://regify.github.io/regify-util/group__map.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(data);</div>
+<div class="line">        <a class="codeRef" href="https://regify.github.io/regify-util/group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(data);</div>
 <div class="line">        data = NULL;</div>
 <div class="line"> </div>
 <div class="line">    } <span class="keywordflow">while</span> (<span class="keyword">false</span>);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span> (namevid) free(namevid);</div>
 <div class="line">    <span class="keywordflow">if</span> (vids) <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>(vids);</div>
-<div class="line">    <span class="keywordflow">if</span> (data) <a class="codeRef" href="https://regify.github.io/regify-util/group__map.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(data);</div>
+<div class="line">    <span class="keywordflow">if</span> (data) <a class="codeRef" href="https://regify.github.io/regify-util/group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(data);</div>
 <div class="line">    <span class="keywordflow">if</span> (dc) <a class="code" href="group__dvgeneral.html#ga9d755a06f9460016c54ca265d25cf7b5">dvFree</a>(dc);</div>
 <div class="line">    <span class="keywordflow">return</span> ret;</div>
 <div class="line">}</div>
@@ -197,15 +197,15 @@ Published payloads have different behavior:</h3>
 <div class="ttc" id="agroup__dvmain_html_ga4d4b918694b348de535c309e475eb95b"><div class="ttname"><a href="group__dvmain.html#ga4d4b918694b348de535c309e475eb95b">dvGetVid</a></div><div class="ttdeci">DVAPI int32_t dvGetVid(ruMap vidMap, const char *vid, char **pid)</div></div>
 <div class="ttc" id="agroup__dvpublish_html_ga139e8e1a3239cd14002b01c02e4490d3"><div class="ttname"><a href="group__dvpublish.html#ga139e8e1a3239cd14002b01c02e4490d3">dvGetPublished</a></div><div class="ttdeci">DVAPI int32_t dvGetPublished(dvCtx dc, const char *passwd, ruList vids, ruMap *vidMap)</div></div>
 <div class="ttc" id="agroup__dvpublish_html_gad608e74c9863c749fae3472172651265"><div class="ttname"><a href="group__dvpublish.html#gad608e74c9863c749fae3472172651265">dvPublish</a></div><div class="ttdeci">DVAPI int32_t dvPublish(dvCtx dc, const char *passwd, int durationDays, const char *data, char **vid)</div></div>
+<div class="ttc" id="agroup__hashmap_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="https://regify.github.io/regify-util/group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div></div>
+<div class="ttc" id="agroup__hashmap_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div></div>
 <div class="ttc" id="agroup__list_html_ga67286d2c5522bdb4428436c561f122e5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a></div><div class="ttdeci">#define ruListAppend(rl, data)</div></div>
 <div class="ttc" id="agroup__list_html_ga88f5af8c2f8986a0708a06c1d0bb2183"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a></div><div class="ttdeci">void * ruIterator</div></div>
 <div class="ttc" id="agroup__list_html_ga8f7ce9a43ad50071bc1161ecb21a38d5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a></div><div class="ttdeci">RUAPI ruList ruListFree(ruList rl)</div></div>
-<div class="ttc" id="agroup__list_html_gaaa06a57ba6d6104137eb2092933deac6"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gaaa06a57ba6d6104137eb2092933deac6">ruListNew</a></div><div class="ttdeci">RUAPI ruList ruListNew(ruFreeFunc destructor)</div></div>
 <div class="ttc" id="agroup__list_html_gab25c1662a91a5e0d68a3f04efd1a0cc2"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></div><div class="ttdeci">void * ruList</div></div>
 <div class="ttc" id="agroup__list_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div></div>
 <div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div></div>
-<div class="ttc" id="agroup__map_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="https://regify.github.io/regify-util/group__map.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div></div>
-<div class="ttc" id="agroup__map_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div></div>
+<div class="ttc" id="agroup__misc_html_ga86dd88de865e954dc1d0ea82fd20f21c"><div class="ttname"><a href="https://regify.github.io/regify-util/group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c">ruGetenv</a></div><div class="ttdeci">RUAPI trans_chars ruGetenv(const char *variable)</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div></div>
 <div class="ttc" id="agroup__string_html_gaf8c3433629ebca6c711a379ea72b70fe"><div class="ttname"><a href="https://regify.github.io/regify-util/group__string.html#gaf8c3433629ebca6c711a379ea72b70fe">ruStrCmp</a></div><div class="ttdeci">RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2)</div></div>
 </div><!-- fragment --><h2 class="groupheader">Function Documentation</h2>
@@ -236,7 +236,7 @@ Published payloads have different behavior:</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" href="https://regify.github.io/regify-util/group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *&#160;</td>
+          <td class="paramtype"><a class="elRef" href="https://regify.github.io/regify-util/group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *&#160;</td>
           <td class="paramname"><em>vidMap</em>&#160;</td>
         </tr>
         <tr>
@@ -321,7 +321,7 @@ Published payloads have different behavior:</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 19 2023 12:12:44 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 13:19:39 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

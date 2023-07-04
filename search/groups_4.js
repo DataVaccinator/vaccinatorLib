@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['general_20api_740',['General API',['../group__dvgeneral.html',1,'']]],
-  ['glossary_741',['Glossary',['../group__glos.html',1,'']]]
+  ['file_20access_20monitoring_1017',['File Access Monitoring',['https://regify.github.io/regify-util/group__fam.html',1,'']]],
+  ['file_20i_2fo_1018',['File I/O',['https://regify.github.io/regify-util/group__io.html',1,'']]]
 ];

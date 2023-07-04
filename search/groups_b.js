@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['regify_2dutil_20error_20codes_751',['regify-util Error Codes',['https://regify.github.io/regify-util/group__ruerror.html',1,'']]],
-  ['regular_20expressions_752',['Regular Expressions',['https://regify.github.io/regify-util/group__regex.html',1,'']]]
+  ['memory_20management_1029',['Memory Management',['https://regify.github.io/regify-util/group__memory.html',1,'']]],
+  ['miscellaneous_20functions_1030',['Miscellaneous Functions',['https://regify.github.io/regify-util/group__misc.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['key_20value_20storage_745',['Key Value Storage',['https://regify.github.io/regify-util/group__kvstore__sec.html',1,'']]]
+  ['ini_20file_20handling_1024',['Ini File Handling',['https://regify.github.io/regify-util/group__ini.html',1,'']]]
 ];

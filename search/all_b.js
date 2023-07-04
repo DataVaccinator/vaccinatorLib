@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['memory_20management_75',['Memory Management',['https://regify.github.io/regify-util/group__memory.html',1,'']]],
-  ['miscellaneous_20functions_76',['Miscellaneous Functions',['https://regify.github.io/regify-util/group__misc.html',1,'']]],
-  ['msec_5ft_77',['msec_t',['https://regify.github.io/regify-util/group__misc.html#gae416893e8160c5b7c6da3765e4707d5d',1,]]]
+  ['list_78',['list',['https://regify.github.io/regify-util/struct_kv_store__.html#a52a333e638a82b71314503253a6c5252',1,'KvStore_']]],
+  ['list_20collection_79',['List Collection',['https://regify.github.io/regify-util/group__list.html',1,'']]],
+  ['logging_20facility_80',['Logging Facility',['https://regify.github.io/regify-util/group__logging.html',1,'']]]
 ];

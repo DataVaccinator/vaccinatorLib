@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['publishing_20api_750',['Publishing API',['../group__dvpublish.html',1,'']]]
+  ['list_20collection_1027',['List Collection',['https://regify.github.io/regify-util/group__list.html',1,'']]],
+  ['logging_20facility_1028',['Logging Facility',['https://regify.github.io/regify-util/group__logging.html',1,'']]]
 ];

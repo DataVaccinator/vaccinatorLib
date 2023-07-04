@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['usec_414',['usec',['https://regify.github.io/regify-util/structru_time_val.html#aebdd1a6e510874064a7f3a3a6ff935bd',1,'ruTimeVal']]],
-  ['usec_5ft_415',['usec_t',['https://regify.github.io/regify-util/group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884',1,]]]
+  ['threading_20related_556',['Threading Related',['https://regify.github.io/regify-util/group__threading.html',1,'']]],
+  ['trans_5fbytes_557',['trans_bytes',['https://regify.github.io/regify-util/group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,]]],
+  ['trans_5fchars_558',['trans_chars',['https://regify.github.io/regify-util/group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,]]],
+  ['trans_5fptr_559',['trans_ptr',['https://regify.github.io/regify-util/group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,]]],
+  ['trans_5funi_560',['trans_uni',['https://regify.github.io/regify-util/group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,]]]
 ];

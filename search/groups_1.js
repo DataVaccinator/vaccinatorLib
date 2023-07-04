@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['data_20api_736',['Data API',['../group__dvmain.html',1,'']]],
-  ['data_20cleaning_20utility_737',['Data Cleaning Utility',['https://regify.github.io/regify-util/group__cleaner.html',1,'']]]
+  ['container_20type_20specifications_1013',['Container Type Specifications',['https://regify.github.io/regify-util/group__specs.html',1,'']]]
 ];

@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['threading_20related_409',['Threading Related',['https://regify.github.io/regify-util/group__threading.html',1,'']]],
-  ['trans_5fbytes_410',['trans_bytes',['https://regify.github.io/regify-util/group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,]]],
-  ['trans_5fchars_411',['trans_chars',['https://regify.github.io/regify-util/group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,]]],
-  ['trans_5fptr_412',['trans_ptr',['https://regify.github.io/regify-util/group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,]]],
-  ['trans_5funi_413',['trans_uni',['https://regify.github.io/regify-util/group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,]]]
+  ['sec_550',['sec',['https://regify.github.io/regify-util/structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f',1,'ruTimeVal']]],
+  ['sec_5ft_551',['sec_t',['https://regify.github.io/regify-util/group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9',1,]]],
+  ['set_552',['set',['https://regify.github.io/regify-util/struct_kv_store__.html#ac3a3b7caea49b0e917e6db9a26476357',1,'KvStore_']]],
+  ['srcpath_553',['srcPath',['https://regify.github.io/regify-util/structru_fam_event__.html#abb1a6c225865ea8d47fda5952978c8f9',1,'ruFamEvent_']]],
+  ['string_20functions_554',['String Functions',['https://regify.github.io/regify-util/group__string.html',1,'']]],
+  ['string_20object_555',['String Object',['https://regify.github.io/regify-util/group__ru_string.html',1,'']]]
 ];
