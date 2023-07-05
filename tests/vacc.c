@@ -29,7 +29,7 @@ START_TEST ( api ) {
     dvCtx dc = NULL;
     const char *string = "string";
     char *strptr = NULL;
-    ruList list = ruListNewType(NULL);
+    ruList list = ruListNew(NULL);
     ruMap map = NULL;
 
     do {
@@ -250,7 +250,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     // retrieve data
-    vids = ruListNewType(NULL);
+    vids = ruListNew(NULL);
     test = "ruListAppend";
     ret = ruListAppend(vids, fovid);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -395,7 +395,7 @@ START_TEST ( publish ) {
         fail_unless(exp == ret, retText, test, exp, ret);
 
         // retrieve data
-        vids = ruListNewType(NULL);
+        vids = ruListNew(NULL);
         test = "ruListAppend";
         ret = ruListAppend(vids, fovid);
         fail_unless(exp == ret, retText, test, exp, ret);

@@ -205,7 +205,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
 
     do {
         if (!*data) {
-            *data = ruMapNewType(ruTypeStrFree(),
+            *data = ruMapNew(ruTypeStrFree(),
                                  ruTypePtr(freeGetRes));
         }
 
@@ -222,7 +222,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
             LOAD(ctx, vid, &dt, &len);
             if (!dt) {
                 if (!getvids) {
-                    getvids = ruListNewType(NULL);
+                    getvids = ruListNew(NULL);
                 }
                 ruListAppend(getvids, vid);
                 continue;
@@ -461,7 +461,7 @@ static int32_t addSearchWord(ruList* indexWords, const char* appId,
         if (ret != RUE_OK) break;
 
         if (!*indexWords) {
-            *indexWords = ruListNewType(ruTypeStrFree());
+            *indexWords = ruListNew(ruTypeStrFree());
         }
         ruVerbLogf("Adding term:'%s' for word:'%s' with appid:'%s'",
                    term, word, appId);

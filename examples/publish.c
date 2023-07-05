@@ -55,7 +55,7 @@ int main ( int argc, char **argv ) {
         if (ret != RUE_OK) break;
 
         // retrieve data
-        vids = ruListNewType(NULL);
+        vids = ruListNew(NULL);
         ret = ruListAppend(vids, namevid);
         if (ret != RUE_OK) break;
 

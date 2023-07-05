@@ -135,7 +135,7 @@ int main ( int argc, char **argv ) {
         printf("addrvid: %s\n", addrvid);
 
         // retrieve data
-        vids = ruListNewType(NULL);
+        vids = ruListNew(NULL);
         ret = ruListAppend(vids, namevid);
         if (ret) break;
         ret = ruListAppend(vids, addrvid);

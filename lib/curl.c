@@ -128,7 +128,7 @@ int32_t freeKvList(dvKvList kvl) {
 static int32_t curlHdrCb(void* headerCtx, const char* key, const char* value) {
     dvHdrCtx sl = (dvHdrCtx)headerCtx;
     if (!sl->headers) {
-        sl->headers = ruListNewType(ruTypeStrFree());
+        sl->headers = ruListNew(ruTypeStrFree());
     }
     char *h;
     if (!value) {

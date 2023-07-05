@@ -172,7 +172,7 @@ int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
         }
 
         if (!*data) {
-            *data = ruMapNewType(ruTypeStrFree(),
+            *data = ruMapNew(ruTypeStrFree(),
                                  ruTypePtr(freeGetRes));
         }
 
@@ -261,7 +261,7 @@ int32_t parseSearchData(yajl_val node, ruList* vids) {
             continue;
         }
         if (!*vids) {
-            *vids = ruListNewType(ruTypeStrFree());
+            *vids = ruListNew(ruTypeStrFree());
         }
         ret = ruListAppend(*vids, ruStrDup(YAJL_GET_STRING(vid)));
         if (ret != RUE_OK) {
