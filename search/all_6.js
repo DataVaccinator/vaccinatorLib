@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['general_20api_64',['General API',['../group__dvgeneral.html',1,'']]],
-  ['get_65',['get',['https://regify.github.io/regify-util/struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'KvStore_']]],
-  ['glossary_66',['Glossary',['../group__glos.html',1,'']]]
+  ['container_20type_20specifications_11',['Container Type Specifications',['https://regify.github.io/regify-util/group__specs.html',1,'']]],
+  ['ctx_12',['ctx',['https://regify.github.io/regify-util/struct_kv_store__.html#a1f6d09b30c54854dfca659b7463ac207',1,'KvStore_']]]
 ];

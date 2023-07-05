@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['buffer_20functions_1011',['Buffer Functions',['https://regify.github.io/regify-util/group__buffer.html',1,'']]],
-  ['buffer_20object_1012',['Buffer Object',['https://regify.github.io/regify-util/group__ru_buffer.html',1,'']]]
+  ['16_20bit_20integer_1026',['16 Bit Integer',['https://regify.github.io/regify-util/group__typeint16.html',1,'']]]
 ];

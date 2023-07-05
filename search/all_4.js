@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['entryfilter_58',['entryFilter',['https://regify.github.io/regify-util/group__io.html#ga96b2df183649f58bd746edc4a0c6161c',1,]]],
-  ['entrymgr_59',['entryMgr',['https://regify.github.io/regify-util/group__io.html#gae838891e096d47726baeec65b792fd51',1,]]],
-  ['error_20codes_60',['Error Codes',['../group__dverrors.html',1,'']]],
-  ['eventtype_61',['eventType',['https://regify.github.io/regify-util/structru_fam_event__.html#aa73ed1819d01004c05b8b1908ef91ef4',1,'ruFamEvent_']]]
+  ['alloc_5fbytes_4',['alloc_bytes',['https://regify.github.io/regify-util/group__misc.html#ga282bddf4c8f74d03e5d1203a240cfa4f',1,]]],
+  ['alloc_5fchars_5',['alloc_chars',['https://regify.github.io/regify-util/group__misc.html#ga972d4f4f858964bb2381d186ea96d88d',1,]]],
+  ['alloc_5fptr_6',['alloc_ptr',['https://regify.github.io/regify-util/group__misc.html#ga9f2753cc325fa665aaf7925682462ecb',1,]]],
+  ['alloc_5funi_7',['alloc_uni',['https://regify.github.io/regify-util/group__misc.html#ga3b8ffe65acbdde945eb6668ac1226f5b',1,]]]
 ];

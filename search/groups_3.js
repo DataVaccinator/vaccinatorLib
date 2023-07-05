@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error_20codes_1016',['Error Codes',['../group__dverrors.html',1,'']]]
+  ['8_20bit_20integer_1029',['8 Bit Integer',['https://regify.github.io/regify-util/group__typeint8.html',1,'']]]
 ];

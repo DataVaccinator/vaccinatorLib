@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['data_20api_1014',['Data API',['../group__dvmain.html',1,'']]],
-  ['data_20cleaning_20utility_1015',['Data Cleaning Utility',['https://regify.github.io/regify-util/group__cleaner.html',1,'']]]
+  ['64_20bit_20integer_1028',['64 Bit Integer',['https://regify.github.io/regify-util/group__typeint64.html',1,'']]]
 ];

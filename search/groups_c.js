@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['publishing_20api_1031',['Publishing API',['../group__dvpublish.html',1,'']]]
+  ['json_1044',['JSON',['https://regify.github.io/regify-util/group__json.html',1,'']]]
 ];

@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['key_20value_20storage_72',['Key Value Storage',['https://regify.github.io/regify-util/group__kvstore__sec.html',1,'']]],
-  ['kvget_73',['kvget',['https://regify.github.io/regify-util/group__kvstore__sec.html#ga446330a04500577d5331d33472f19d32',1,]]],
-  ['kvlist_74',['kvlist',['https://regify.github.io/regify-util/group__kvstore__sec.html#ga6ca4b7cac97b25236e64580ed0adfe7d',1,]]],
-  ['kvset_75',['kvset',['https://regify.github.io/regify-util/group__kvstore__sec.html#ga9048fec5cec2283bac868aa9a4a42c74',1,]]],
-  ['kvstore_76',['KvStore',['https://regify.github.io/regify-util/group__kvstore__sec.html#ga9abc942c577335834b99c80262ed4c84',1,]]],
-  ['kvstore_5f_77',['KvStore_',['https://regify.github.io/regify-util/struct_kv_store__.html',1,'']]]
+  ['general_20api_69',['General API',['../group__dvgeneral.html',1,'']]],
+  ['get_70',['get',['https://regify.github.io/regify-util/struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'KvStore_']]],
+  ['glossary_71',['Glossary',['../group__glos.html',1,'']]]
 ];

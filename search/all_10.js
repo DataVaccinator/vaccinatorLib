@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['threading_20related_556',['Threading Related',['https://regify.github.io/regify-util/group__threading.html',1,'']]],
-  ['trans_5fbytes_557',['trans_bytes',['https://regify.github.io/regify-util/group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,]]],
-  ['trans_5fchars_558',['trans_chars',['https://regify.github.io/regify-util/group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,]]],
-  ['trans_5fptr_559',['trans_ptr',['https://regify.github.io/regify-util/group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,]]],
-  ['trans_5funi_560',['trans_uni',['https://regify.github.io/regify-util/group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,]]]
+  ['memory_20management_86',['Memory Management',['https://regify.github.io/regify-util/group__memory.html',1,'']]],
+  ['miscellaneous_20functions_87',['Miscellaneous Functions',['https://regify.github.io/regify-util/group__misc.html',1,'']]],
+  ['msec_5ft_88',['msec_t',['https://regify.github.io/regify-util/group__misc.html#gae416893e8160c5b7c6da3765e4707d5d',1,]]]
 ];

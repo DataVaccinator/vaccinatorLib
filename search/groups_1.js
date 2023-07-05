@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['container_20type_20specifications_1013',['Container Type Specifications',['https://regify.github.io/regify-util/group__specs.html',1,'']]]
+  ['32_20bit_20integer_1027',['32 Bit Integer',['https://regify.github.io/regify-util/group__typeint32.html',1,'']]]
 ];

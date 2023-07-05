@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['list_20collection_1027',['List Collection',['https://regify.github.io/regify-util/group__list.html',1,'']]],
-  ['logging_20facility_1028',['Logging Facility',['https://regify.github.io/regify-util/group__logging.html',1,'']]]
+  ['hash_20map_1041',['Hash Map',['https://regify.github.io/regify-util/group__hashmap.html',1,'']]],
+  ['hash_20set_1042',['Hash Set',['https://regify.github.io/regify-util/group__hashset.html',1,'']]]
 ];

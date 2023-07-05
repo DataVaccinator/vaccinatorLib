@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['general_20api_1019',['General API',['../group__dvgeneral.html',1,'']]],
-  ['glossary_1020',['Glossary',['../group__glos.html',1,'']]]
+  ['container_20type_20specifications_1033',['Container Type Specifications',['https://regify.github.io/regify-util/group__specs.html',1,'']]]
 ];

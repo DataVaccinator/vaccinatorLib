@@ -230,7 +230,7 @@ Example Usage</h2>
 <div class="line">        printf(<span class="stringliteral">&quot;addrvid: %s\n&quot;</span>, addrvid);</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// retrieve data</span></div>
-<div class="line">        vids = ruListNewType(NULL);</div>
+<div class="line">        vids = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a>(NULL);</div>
 <div class="line">        ret = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(vids, namevid);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        ret = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(vids, addrvid);</div>
@@ -238,8 +238,8 @@ Example Usage</h2>
 <div class="line">        ret = <a class="code" href="group__dvmain.html#ga0ec9b624e6f09b04d055d48270ff0600">dvGet</a>(dc, vids, &amp;data);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a> li = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(vids);</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li;</div>
-<div class="line">            vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span> *out, *vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li;</div>
+<div class="line">            vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
 <div class="line">            ret = <a class="code" href="group__dvmain.html#ga4d4b918694b348de535c309e475eb95b">dvGetVid</a>(data, vd, &amp;out);</div>
 <div class="line">            <span class="keywordflow">if</span> (ret == <a class="codeRef" href="https://regify.github.io/regify-util/group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a>) {</div>
 <div class="line">                printf(<span class="stringliteral">&quot;pid for vid: &#39;%s&#39; is: &#39;%s&#39;\n&quot;</span>, vd, out);</div>
@@ -254,7 +254,7 @@ Example Usage</h2>
 <div class="line">        ret = <a class="code" href="group__dvmain.html#gadf8fd43e07b1a4f8c016980b5b2c7bfe">dvSearch</a>(dc, searchTerms, &amp;foundVids);</div>
 <div class="line">        <span class="keywordflow">if</span> (ret) <span class="keywordflow">break</span>;</div>
 <div class="line">        li = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(foundVids);</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span>* vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li; vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">char</span>* vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*); li; vd = <a class="codeRef" href="https://regify.github.io/regify-util/group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
 <div class="line">            printf(<span class="stringliteral">&quot;found vid: &#39;%s&#39;\n&quot;</span>, vd);</div>
 <div class="line">        }</div>
 <div class="line"> </div>
@@ -316,9 +316,10 @@ Example Usage</h2>
 <div class="ttc" id="agroup__list_html_ga67286d2c5522bdb4428436c561f122e5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a></div><div class="ttdeci">#define ruListAppend(rl, data)</div></div>
 <div class="ttc" id="agroup__list_html_ga88f5af8c2f8986a0708a06c1d0bb2183"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a></div><div class="ttdeci">void * ruIterator</div></div>
 <div class="ttc" id="agroup__list_html_ga8f7ce9a43ad50071bc1161ecb21a38d5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a></div><div class="ttdeci">RUAPI ruList ruListFree(ruList rl)</div></div>
+<div class="ttc" id="agroup__list_html_ga9bc498f9b3cd2e848a387ff9fc215220"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a></div><div class="ttdeci">RUAPI ruList ruListNew(ruType valueType)</div></div>
 <div class="ttc" id="agroup__list_html_gab25c1662a91a5e0d68a3f04efd1a0cc2"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></div><div class="ttdeci">void * ruList</div></div>
-<div class="ttc" id="agroup__list_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div></div>
 <div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div></div>
+<div class="ttc" id="agroup__listobj_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="https://regify.github.io/regify-util/group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div></div>
 <div class="ttc" id="agroup__logging_html_gaa48441dca350811c725a8096ccbd59f8"><div class="ttname"><a href="https://regify.github.io/regify-util/group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a></div><div class="ttdeci">#define RU_LOG_VERB</div></div>
 <div class="ttc" id="agroup__misc_html_ga86dd88de865e954dc1d0ea82fd20f21c"><div class="ttname"><a href="https://regify.github.io/regify-util/group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c">ruGetenv</a></div><div class="ttdeci">RUAPI trans_chars ruGetenv(const char *variable)</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga616dba9a5dafed8351aa98c68fab25e2"><div class="ttname"><a href="https://regify.github.io/regify-util/group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a></div><div class="ttdeci">#define RUE_PARAMETER_NOT_SET</div></div>
@@ -331,7 +332,7 @@ Example Usage</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 4 2023 13:19:39 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jul 5 2023 11:55:06 for DataVaccinator Client by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
