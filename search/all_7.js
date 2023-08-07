@@ -36,7 +36,7 @@ var searchData=
   ['dvgetvid_46',['dvGetVid',['../group__dvmain.html#ga4d4b918694b348de535c309e475eb95b',1,'vaccinator.h']]],
   ['dvheadercb_47',['dvHeaderCb',['../group__dvgeneral.html#ga5572434f0d6a452e9eac301c53afaf76',1,'vaccinator.h']]],
   ['dvindexcb_48',['dvIndexCb',['../group__dvmain.html#ga4691f806b2af80220aae15c1a9704109',1,'vaccinator.h']]],
-  ['dvlasterror_49',['dvLastError',['../group__dvgeneral.html#ga47209f4347d064effde208daec48238f',1,'vaccinator.h']]],
+  ['dvlasterror_49',['dvLastError',['../group__dvgeneral.html#ga99e793818faf1530b55c08d40c4d6c45',1,'vaccinator.h']]],
   ['dvnew_50',['dvNew',['../group__dvgeneral.html#gaa569238d6383532ab3e56ff82195457a',1,'vaccinator.h']]],
   ['dvpostcb_51',['dvPostCb',['../group__dvgeneral.html#gaa1d2a8effa4d10ae3ca38d95271ac55c',1,'vaccinator.h']]],
   ['dvpublish_52',['dvPublish',['../group__dvpublish.html#gad608e74c9863c749fae3472172651265',1,'vaccinator.h']]],
@@ -48,6 +48,6 @@ var searchData=
   ['dvsetpostfn_58',['dvSetPostFn',['../group__dvgeneral.html#ga005e918ec4bbf9cfc4ac5b34b2f80124',1,'vaccinator.h']]],
   ['dvsetprop_59',['dvSetProp',['../group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf',1,'vaccinator.h']]],
   ['dvupdate_60',['dvUpdate',['../group__dvmain.html#ga85739c5f18cab8c27e54ba846fbe8d6f',1,'vaccinator.h']]],
-  ['dvversion_61',['dvVersion',['../group__dvgeneral.html#gaa7175c1e3629531ab494d44a22ba16ff',1,'vaccinator.h']]],
+  ['dvversion_61',['dvVersion',['../group__dvgeneral.html#ga2cab763f3aa1b83617c9a7081ac83e5e',1,'vaccinator.h']]],
   ['dvwipe_62',['dvWipe',['../group__dvmain.html#gaf6bbf55e624aa89a0bed30b794dd2758',1,'vaccinator.h']]]
 ];

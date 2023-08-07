@@ -291,8 +291,8 @@
       <type>DVAPI const char *</type>
       <name>dvVersion</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>gaa7175c1e3629531ab494d44a22ba16ff</anchor>
-      <arglist>()</arglist>
+      <anchor>ga2cab763f3aa1b83617c9a7081ac83e5e</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>DVAPI void</type>
@@ -312,8 +312,8 @@
       <type>DVAPI const char *</type>
       <name>dvLastError</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>ga47209f4347d064effde208daec48238f</anchor>
-      <arglist>()</arglist>
+      <anchor>ga99e793818faf1530b55c08d40c4d6c45</anchor>
+      <arglist>(void)</arglist>
     </member>
   </compound>
   <compound kind="group">
