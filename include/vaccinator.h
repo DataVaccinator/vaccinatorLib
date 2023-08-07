@@ -589,7 +589,7 @@ DVAPI int32_t dvSetPostCb(dvCtx dc, dvPostCb callback, void* cbCtx);
  * \ref DV_APPVERSION which is sent to the service providers.
  * \return Version of this package. This string is static and must not be freed.
  */
-DVAPI const char* dvVersion();
+DVAPI const char* dvVersion(void);
 
 /**
  * \brief Sets the global logging function for this process.
@@ -682,7 +682,7 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value);
  * \ingroup errors
  * @return Last error message. Must be copied if it is to persist.
  */
-DVAPI const char* dvLastError();
+DVAPI const char* dvLastError(void);
 
 /**
  * @}

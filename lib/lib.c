@@ -373,7 +373,7 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
 /******************************************************************************/
 /*                             Public Functions                               */
 /******************************************************************************/
-DVAPI const char* dvVersion() {
+DVAPI const char* dvVersion(void) {
     return myVersion;
 }
 
