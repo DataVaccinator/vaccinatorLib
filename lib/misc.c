@@ -45,7 +45,7 @@ int32_t validateAppId(const char*appId) {
 RU_THREAD_LOCAL char dvError[DV_ERRBUF_SIZE];
 RU_THREAD_LOCAL int dvErrInit = 0;
 
-void dvClearError() {
+void dvClearError(void) {
     dvError[0] = '\0';
 }
 
