@@ -131,7 +131,7 @@ Example Usage</h2>
 <div class="line"><span class="comment">// The performance of this logger is inadequate for production usage.</span></div>
 <div class="line"><span class="comment">// It is merely here to showcase the callback usage.</span></div>
 <div class="line"><span class="keywordtype">void</span> myLogFunc (<span class="keyword">const</span> <span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">char</span> *message) {</div>
-<div class="line">    FILE *wh = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga3716b147f53dd26c805547556b9608be">ruFOpen</a>((<span class="keyword">const</span> <span class="keywordtype">char</span>*) user_data, <span class="stringliteral">&quot;a&quot;</span>, NULL);</div>
+<div class="line">    FILE *wh = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#gaaf60d483f5ec520635d5260e0cfe287d">ruFOpen</a>((<span class="keyword">const</span> <span class="keywordtype">char</span>*) user_data, <span class="stringliteral">&quot;a&quot;</span>, NULL);</div>
 <div class="line">    <span class="keywordflow">if</span> (wh) {</div>
 <div class="line">        fwrite(message, strlen(message), <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), wh);</div>
 <div class="line">        fclose(wh);</div>
@@ -168,9 +168,9 @@ Example Usage</h2>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">do</span> {</div>
 <div class="line">        <span class="comment">// local cache</span></div>
-<div class="line">        <span class="keywordflow">if</span> (!<a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga1d8e3aea6c159a286cb6c410b32893ca">ruIsDir</a>(CACHE_DIR)) {</div>
-<div class="line">            ret = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga3602170134b8290324e6aca3a0b23650">ruMkdir</a>(CACHE_DIR, 0755, <span class="keyword">false</span>);</div>
-<div class="line">            <span class="keywordflow">if</span> (!<a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga1d8e3aea6c159a286cb6c410b32893ca">ruIsDir</a>(CACHE_DIR)) {</div>
+<div class="line">        <span class="keywordflow">if</span> (!<a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga65a6130e9d67563b43957b60e4073fa5">ruIsDir</a>(CACHE_DIR)) {</div>
+<div class="line">            ret = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#gaf5f3d6bf791c69eda53a9da77f128a6d">ruMkdir</a>(CACHE_DIR, 0755, <span class="keyword">false</span>);</div>
+<div class="line">            <span class="keywordflow">if</span> (!<a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#ga65a6130e9d67563b43957b60e4073fa5">ruIsDir</a>(CACHE_DIR)) {</div>
 <div class="line">                printf(<span class="stringliteral">&quot;failed to create folder &#39;%s&#39; ec [%d]\n&quot;</span>, CACHE_DIR, ret);</div>
 <div class="line">                <span class="keywordflow">break</span>;</div>
 <div class="line">            }</div>
@@ -308,9 +308,9 @@ Example Usage</h2>
 <div class="ttc" id="agroup__dvmain_html_gaf6bbf55e624aa89a0bed30b794dd2758"><div class="ttname"><a href="group__dvmain.html#gaf6bbf55e624aa89a0bed30b794dd2758">dvWipe</a></div><div class="ttdeci">DVAPI int32_t dvWipe(dvCtx dc, ruList vids)</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="https://regify.github.io/regify-util/group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div></div>
 <div class="ttc" id="agroup__hashmap_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div></div>
-<div class="ttc" id="agroup__io_html_ga1d8e3aea6c159a286cb6c410b32893ca"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#ga1d8e3aea6c159a286cb6c410b32893ca">ruIsDir</a></div><div class="ttdeci">RUAPI bool ruIsDir(const char *filename)</div></div>
-<div class="ttc" id="agroup__io_html_ga3602170134b8290324e6aca3a0b23650"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#ga3602170134b8290324e6aca3a0b23650">ruMkdir</a></div><div class="ttdeci">RUAPI int ruMkdir(trans_chars pathname, int mode, bool deep)</div></div>
-<div class="ttc" id="agroup__io_html_ga3716b147f53dd26c805547556b9608be"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#ga3716b147f53dd26c805547556b9608be">ruFOpen</a></div><div class="ttdeci">RUAPI FILE * ruFOpen(const char *filepath, const char *mode, int32_t *code)</div></div>
+<div class="ttc" id="agroup__io_html_ga65a6130e9d67563b43957b60e4073fa5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#ga65a6130e9d67563b43957b60e4073fa5">ruIsDir</a></div><div class="ttdeci">RUAPI bool ruIsDir(trans_chars filename)</div></div>
+<div class="ttc" id="agroup__io_html_gaaf60d483f5ec520635d5260e0cfe287d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#gaaf60d483f5ec520635d5260e0cfe287d">ruFOpen</a></div><div class="ttdeci">RUAPI FILE * ruFOpen(trans_chars filepath, trans_chars mode, int32_t *code)</div></div>
+<div class="ttc" id="agroup__io_html_gaf5f3d6bf791c69eda53a9da77f128a6d"><div class="ttname"><a href="https://regify.github.io/regify-util/group__io.html#gaf5f3d6bf791c69eda53a9da77f128a6d">ruMkdir</a></div><div class="ttdeci">RUAPI int32_t ruMkdir(trans_chars pathname, int mode, bool deep)</div></div>
 <div class="ttc" id="agroup__kvstore__sec_html_ga6ca53476182ed415e0b2093318c57b10"><div class="ttname"><a href="https://regify.github.io/regify-util/group__kvstore__sec.html#ga6ca53476182ed415e0b2093318c57b10">ruNewFileStore</a></div><div class="ttdeci">RUAPI KvStore * ruNewFileStore(const char *folderPath, int32_t *code)</div></div>
 <div class="ttc" id="agroup__kvstore__sec_html_ga7fe8e5566d73bb19a7de73edfa043f4a"><div class="ttname"><a href="https://regify.github.io/regify-util/group__kvstore__sec.html#ga7fe8e5566d73bb19a7de73edfa043f4a">ruFreeStore</a></div><div class="ttdeci">RUAPI void ruFreeStore(void *obj)</div></div>
 <div class="ttc" id="agroup__list_html_ga67286d2c5522bdb4428436c561f122e5"><div class="ttname"><a href="https://regify.github.io/regify-util/group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a></div><div class="ttdeci">#define ruListAppend(rl, data)</div></div>

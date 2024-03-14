@@ -164,7 +164,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ga2cab763f3aa1b83617c9a7081ac83e5e"><td class="memItemLeft" align="right" valign="top">DVAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvgeneral.html#ga2cab763f3aa1b83617c9a7081ac83e5e">dvVersion</a> (void)</td></tr>
 <tr class="memdesc:ga2cab763f3aa1b83617c9a7081ac83e5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the build version of this package.  <a href="group__dvgeneral.html#ga2cab763f3aa1b83617c9a7081ac83e5e">More...</a><br /></td></tr>
 <tr class="separator:ga2cab763f3aa1b83617c9a7081ac83e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf27b3954e334fe85fde4f063e13dd65c"><td class="memItemLeft" align="right" valign="top">DVAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvgeneral.html#gaf27b3954e334fe85fde4f063e13dd65c">dvSetCleanLogger</a> (<a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a> logger, uint32_t logLevel, <a class="elRef" href="https://regify.github.io/regify-util/group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td></tr>
+<tr class="memitem:gaf27b3954e334fe85fde4f063e13dd65c"><td class="memItemLeft" align="right" valign="top">DVAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvgeneral.html#gaf27b3954e334fe85fde4f063e13dd65c">dvSetCleanLogger</a> (<a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a> logger, uint32_t logLevel, <a class="elRef" href="https://regify.github.io/regify-util/group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td></tr>
 <tr class="memdesc:gaf27b3954e334fe85fde4f063e13dd65c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global logging function for this process.  <a href="group__dvgeneral.html#gaf27b3954e334fe85fde4f063e13dd65c">More...</a><br /></td></tr>
 <tr class="separator:gaf27b3954e334fe85fde4f063e13dd65c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7088569c7029864b3cb1bcc0ae3b46cf"><td class="memItemLeft" align="right" valign="top">DVAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a> (<a class="el" href="group__dvgeneral.html#gae4d6bb2909a269a91d4d20f20c5ed050">dvCtx</a> dc, enum <a class="el" href="group__dvgeneral.html#ga59d119d7c5cbaa850d9b7bd96792479f">dvCtxOpt</a> opt, const char *value)</td></tr>
@@ -474,7 +474,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">DVAPI void dvSetCleanLogger </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a>&#160;</td>
+          <td class="paramtype"><a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a>&#160;</td>
           <td class="paramname"><em>logger</em>, </td>
         </tr>
         <tr>
@@ -498,11 +498,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the global logging function for this process. </p>
-<p>This function is like <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> with the difference that log data has its credentials sanitized out. This is the preferred alternative to <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> when using the <a class="el" href="group__glos.html#dvclient">DataVaccinator Client</a>. You can specify credentials to be sanitized out by calling <a class="el" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a> with <a class="el" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fa65628afe51aae3be847e9a5f69342269">DV_SECRET</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This function is like <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> with the difference that log data has its credentials sanitized out. This is the preferred alternative to <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> when using the <a class="el" href="group__glos.html#dvclient">DataVaccinator Client</a>. You can specify credentials to be sanitized out by calling <a class="el" href="group__dvgeneral.html#ga7088569c7029864b3cb1bcc0ae3b46cf">dvSetProp</a> with <a class="el" href="group__dvgeneral.html#gga59d119d7c5cbaa850d9b7bd96792479fa65628afe51aae3be847e9a5f69342269">DV_SECRET</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">logger</td><td>Logging function that will be called with messages. </td></tr>
     <tr><td class="paramname">logLevel</td><td>Loglevel to determine what gets logged. </td></tr>
-    <tr><td class="paramname">userData</td><td>Opaque custom user data that will be passed to the <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a> implementation. </td></tr>
+    <tr><td class="paramname">userData</td><td>Opaque custom user data that will be passed to the <a class="elRef" href="https://regify.github.io/regify-util/group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a> implementation. </td></tr>
   </table>
   </dd>
 </dl>
