@@ -24,9 +24,9 @@
 int main ( int argc, char **argv ) {
     int32_t number_failed;
     if (argc > 1 && ruStrCmp(argv[1], "-v") == 0) {
-        ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL);
+        ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL, NULL, false);
     } else {
-        ruSetLogger(ruStdErrorLogger, RU_LOG_INFO, NULL);
+        ruSetLogger(ruStdErrorLogger, RU_LOG_INFO, NULL, NULL, false);
     }
     Suite *suite = suite_create ( "vaccinator" );
     suite_add_tcase(suite, cipherTests());
