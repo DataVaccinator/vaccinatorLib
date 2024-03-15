@@ -20,7 +20,6 @@ The project is built using https://cmake.org[Cmake].
 The main dependenies are the following:
 
 * https://github.com/regify/regify-util/[regify-util] which also requires https://icu.unicode.org[ICU]
-* https://github.com/lloyd/yajl/[yajl]
 * https://curl.se/libcurl/[libcurl] and its sub dependencies
 * https://github.com/Mbed-TLS/mbedtls[Mbed TLS]
 * https://libcheck.github.io/check/[libcheck], optional for running the unit tests
@@ -61,7 +60,7 @@ This is a sample win32 package build with nmake
         -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=win32 \
         -DCMAKE_BUILD_TYPE=Release \
         -DDEPS_BASE=..\\thirdparty \
-        -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON -DINCLUDE_CURL=ON \
+        -DINCLUDE_MBEDTLS=ON -DINCLUDE_CURL=ON \
         -DSAMPLES=ON -DDOCS=ON  ..
  nmake package
 
@@ -85,7 +84,7 @@ Here is a sample install on Linux
     -DCMAKE_SYSTEM_NAME=Darwin -DDNAME_ARCH=x86_64 \
     -DCMAKE_BUILD_TYPE=Release \
     -DDEPS_BASE=../thirdparty \
-    -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON ..
+    -DINCLUDE_MBEDTLS=ON ..
  make install
 
 A package build
@@ -96,7 +95,7 @@ A package build
         -DCMAKE_SYSTEM_NAME=Darwin -DDNAME_ARCH=x86_64 \
         -DCMAKE_BUILD_TYPE=Release \
         -DDEPS_BASE=../thirdparty \
-        -DINCLUDE_MBEDTLS=ON -DINCLUDE_YAJL=ON \
+        -DINCLUDE_MBEDTLS=ON \
         -DSAMPLES=ON -DDOCS=ON ..
  make package
 

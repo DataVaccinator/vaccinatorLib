@@ -24,16 +24,18 @@
 int main ( int argc, char **argv ) {
     int32_t number_failed;
     if (argc > 1 && ruStrCmp(argv[1], "-v") == 0) {
-        ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL, NULL, false);
+        ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL,
+                    NULL, false);
     } else {
-        ruSetLogger(ruStdErrorLogger, RU_LOG_INFO, NULL, NULL, false);
+        ruSetLogger(ruStdErrorLogger, RU_LOG_INFO, NULL,
+                    NULL, false);
     }
-    Suite *suite = suite_create ( "vaccinator" );
+    Suite *suite = suite_create("vaccinator");
     suite_add_tcase(suite, cipherTests());
     suite_add_tcase(suite, vaccTests());
     suite_add_tcase(suite, cacheTests());
-    suite_add_tcase(suite, changeTests() );
-    SRunner *runner = srunner_create ( suite );
+    suite_add_tcase(suite, changeTests());
+    SRunner *runner = srunner_create(suite);
     srunner_run_all(runner, CK_NORMAL);
     number_failed = srunner_ntests_failed(runner);
     srunner_free(runner);

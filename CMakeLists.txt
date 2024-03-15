@@ -24,13 +24,10 @@ set(REVISION 0 CACHE STRING "The revision")
 set(DEPS_BASE ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
 set(MBEDTLS_BASE ${DEPS_BASE} CACHE STRING "Mbed TLS installation prefix")
 set(RFUTIL_BASE ${DEPS_BASE} CACHE STRING "regify-util installation prefix")
-set(YAJL_BASE ${DEPS_BASE} CACHE STRING "yajl installation prefix")
-set(YAJL_LIB "" CACHE STRING "Full path to the yajl library to link against")
 set(CURL_BASE ${DEPS_BASE} CACHE STRING "libcurl installation prefix")
 set(CURL_LIB "" CACHE STRING "Full path to the cURL library to link against")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" ON)
 option(INCLUDE_MBEDTLS "Whether to include Mbed TLS statically" ON)
-option(INCLUDE_YAJL "Whether to include yajl statically. Do give the full path to the static lib to YAJL_LIB" OFF)
 option(INCLUDE_CURL "Whether to include cURL statically. Do give the full paths to the static libs to CURL_LIB" OFF)
 option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
@@ -102,8 +99,6 @@ if(NOT DOC_ONLY)
     endif()
     if(WIN AND NOT MINGW)
         # visual studio
-        set(YAJL_INCLUDE_DIRS ${YAJL_BASE}\\include)
-        set(YAJL_LIBRARY_DIRS ${YAJL_BASE}\\lib)
         if (NOT DEFINED CURL_CONFIG)
             set(CURL_INCLUDE_DIRS ${CURL_BASE}\\include)
             set(CURL_LIBRARY_DIRS ${CURL_BASE}\\lib)
@@ -117,20 +112,7 @@ if(NOT DOC_ONLY)
         find_package(Threads REQUIRED)
 
         find_package(PkgConfig)
-        if (PkgConfig_FOUND)
-            # get yajl for JSON parsing
-            pkg_check_modules(YAJL yajl)
-            if (YAJL_FOUND)
-                message(Found yajl)
-            endif()
-        endif()
 
-    endif()
-
-    if (NOT YAJL_FOUND)
-      set(YAJL_INCLUDE_DIRS ${YAJL_BASE}/include)
-      set(YAJL_LIBRARY_DIRS ${YAJL_BASE}/lib)
-      set(YAJL_LIBRARIES -lyajl)
     endif()
 
     # core files
@@ -146,15 +128,6 @@ if(NOT DOC_ONLY)
                 "Where the Mbed TLS License file for packaging can be found")
         if(MBEDTLS_LICENSE_PATH STREQUAL "")
             message(FATAL_ERROR "We need the Mbed TLS License file for packaging set MBEDTLS_LICENSE_PATH to its location")
-        endif()
-    endif()
-
-    if(INCLUDE_YAJL AND DOCS)
-        file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_BASE}/share/yajl/LICENSE)
-        set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
-                "Where the YAJL License file for packaging can be found")
-        if(YAJL_LICENSE_PATH MATCHES "$^")
-            message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
         endif()
     endif()
 
@@ -247,12 +220,6 @@ if(DOCS)
             install(FILES ${MBEDTLS_LICENSE_PATH}
                     DESTINATION share/${NAME}
                     RENAME MbedTLS-LICENSE)
-        endif()
-        if(INCLUDE_YAJL)
-            message("Bundling YAJL License ${YAJL_LICENSE_PATH}")
-            install(FILES ${YAJL_LICENSE_PATH}
-                    DESTINATION share/${NAME}
-                    RENAME YAJL-LICENSE)
         endif()
     endif()
 

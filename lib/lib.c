@@ -62,35 +62,25 @@ static int32_t setIntOrDefault(const char* value, int64_t defaultNum,
     return RUE_OK;
 }
 
-static int32_t encodeWordList(ruList wordLst, ruString json, const char* key) {
+static int32_t encodeWordList(ruList wordLst, ruJson jsn, trans_chars key) {
     bool started = false;
-    char *jword = NULL;
     int32_t ret;
     ruIterator li = ruListHead(wordLst, &ret);
     if (ret != RUE_OK) {
         dvSetError("Failed getting indexWords iterator ec:%d", ret);
         return ret;
     }
-    for (char* word = ruIterNext(li, char*); word;
+    for (perm_chars word = ruIterNext(li, char*); word;
          word = ruIterNext(li, char*)) {
-        ruFree(jword);
-        jsonEncodeString(word, &jword);
-        if (started) {
-            ret = ruStringAppendf(json, ",%s", jword);
-            if (ret != RUE_OK) {
-                dvSetError("Failed appending to json string ec:%d", ret);
-                return ret;
-            }
-        } else {
-            ret = ruStringAppendf(json, ",\"%s\":[%s", key, jword);
-            if (ret != RUE_OK) {
-                dvSetError("Failed appending to json string ec:%d", ret);
-                return ret;
-            }
+        if (!started) {
+            ret = ruJsonStartKeyArray(jsn, key);
             started = true;
         }
+        ret = ruJsonSetStr(jsn, word);
     }
-    ret = ruStringAppend(json, "]");
+    if (started) {
+        ret = ruJsonEndArray(jsn);
+    }
     return ret;
 }
 
@@ -101,17 +91,19 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
     dvctx ctx = getDvCtx(dc);
     if (!ctx) return RUE_INVALID_PARAMETER;
 
-    const char *op = "add";
+    perm_chars op = "add";
     int32_t ret;
     alloc_bytes key = ctx->key;
-    char* cs = ctx->appIdEnd;
+    perm_chars cs = ctx->appIdEnd;
     uint8_t pubkey[32];
 
     // to free
-    yajl_val node = NULL;
+    ruJson jrq = NULL;
+    ruJson jsn = NULL;
     dvKvList kvl = NULL;
-    char *jsnData = NULL, *response = NULL, *cipher = NULL;
-    ruString json = NULL;
+    alloc_chars jsnData = NULL;
+    alloc_chars response = NULL;
+    alloc_chars cipher = NULL;
 
     do {
         if (passwd) {
@@ -136,26 +128,28 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
             break;
         }
 
-        jsonEncodeString(cipher, &jsnData);
-        json = ruStringNewf(
-                "{\"version\":%d,\"op\":\"%s\","
-                "\"data\":%s", PROTO_VERSION, op, jsnData);
+        jrq = ruJsonStart(true);
+        ruJsonSetKeyInt(jrq, "version", PROTO_VERSION);
+        ruJsonSetKeyStr(jrq, "op", op);
+        ruJsonSetKeyStr(jrq, "data", cipher);
+
         if (passwd) {
-            ruStringAppendf(json, ",\"duration\":%d", durationDays);
+            ruJsonSetKeyInt(jrq, "duration", durationDays);
         }
         if (indexWords) {
-            ret = encodeWordList(indexWords, json, "words");
+            ret = encodeWordList(indexWords, jsn, "words");
             if (ret != RUE_OK) break;
         }
-        ruStringAppend(json, "}");
+        perm_chars str =  NULL;
+        ret = ruJsonWrite(jsn, &str);
+        if (ret != RUE_OK) break;
 
-        ret = newKvList(&kvl, JSON_FIELD,
-                        ruStringGetCString(json), 0);
+        ret = newKvList(&kvl, JSON_FIELD, str, 0);
         if (ret != RUE_OK) {
             ruCritLogf("failed to create parameter list. Ec: %d", ret);
             break;
         }
-        ruVerbLogf("Do request: %s", ruStringGetCString(json));
+        ruVerbLogf("Do request: %s", str);
         ret = doRequest(ctx, ctx->serviceUrl, kvl,
                         &response, NULL);
         if (ret != RUE_OK) {
@@ -163,12 +157,12 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
             break;
         }
         // parse response
-        node = getJson(response);
-        ret = parseStatus(node, NULL);
+        jsn = getJson(response);
+        ret = parseStatus(jsn, NULL);
         if (ret != RUE_OK) {
             break;
         }
-        ret = parseString(node, "vid", vid);
+        *vid = ruJsonKeyStrDup(jsn, "vid", &ret);
         if (ret != RUE_OK) {
             break;
         }
@@ -176,16 +170,16 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
 
     } while(0);
 
-    yajl_tree_free(node);
+    ruJsonFree(jrq);
+    ruJsonFree(jsn);
     freeKvList(kvl);
-    ruStringFree(json,  false);
     ruFree(response);
     ruFree(cipher);
     ruFree(jsnData);
     return ret;
 }
 
-static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
+static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, trans_chars passwd,
                      bool recode) {
 
     if (!dc || !vids || !data) return RUE_PARAMETER_NOT_SET;
@@ -199,8 +193,8 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
     // to free
     char *response = NULL;
     dvKvList kvl = NULL;
-    yajl_val node = NULL;
-    ruString json = NULL;
+    ruJson jsn = NULL;
+    ruJson jrq = NULL;
     ruList getvids = NULL;
 
     do {
@@ -250,19 +244,22 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
             key = pubkey;
         }
 
-        json = ruStringNewf(
-                "{\"version\":%d,\"op\":\"%s\"", PROTO_VERSION, op);
-        ret = encodeWordList(getvids, json, "vid");
-        if (ret != RUE_OK) break;
-        ruStringAppend(json, "}");
+        jrq = ruJsonStart(true);
+        ruJsonSetKeyInt(jrq, "version", PROTO_VERSION);
+        ruJsonSetKeyStr(jrq, "op", op);
 
-        ret = newKvList(&kvl, JSON_FIELD,
-                        ruStringGetCString(json), 0);
+        ret = encodeWordList(getvids, jrq, "vid");
+        if (ret != RUE_OK) break;
+        perm_chars str =  NULL;
+        ret = ruJsonWrite(jsn, &str);
+        if (ret != RUE_OK) break;
+
+        ret = newKvList(&kvl, JSON_FIELD, str, 0);
         if (ret != RUE_OK) {
             ruCritLogf("failed to create parameter list. Ec: %d", ret);
             break;
         }
-        ruVerbLogf("Do request: %s", ruStringGetCString(json));
+        ruVerbLogf("Do request: %s", str);
         ret = doRequest(ctx, ctx->serviceUrl, kvl,
                         &response, NULL);
         if (ret != RUE_OK) {
@@ -271,18 +268,18 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, const char* passwd,
             break;
         }
         // parse response
-        node = getJson(response);
-        ret = parseStatus(node, NULL);
+        jsn = getJson(response);
+        ret = parseStatus(jsn, NULL);
         if (ret != RUE_OK) {
             break;
         }
         // load/decrypt
-        ret = parseVidData(key, node, getvids, recode, data);
+        ret = parseVidData(key, jsn, getvids, recode, data);
     } while(0);
 
-    yajl_tree_free(node);
+    ruJsonFree(jrq);
+    ruJsonFree(jsn);
     freeKvList(kvl);
-    ruStringFree(json,  false);
     ruFree(response);
     ruListFree(getvids);
 
@@ -299,10 +296,13 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
     int32_t ret;
 
     // to free
-    char *jvid = NULL, *jdata = NULL, *response = NULL, *cipher = NULL;
+    alloc_chars jvid = NULL;
+    alloc_chars jdata = NULL;
+    alloc_chars response = NULL;
+    alloc_chars cipher = NULL;
     dvKvList kvl = NULL;
-    yajl_val node = NULL;
-    ruString json = NULL;
+    ruJson jsn = NULL;
+    ruJson jrq = NULL;
     uint8_t mykey[32];
     alloc_bytes key = ctx->key;
     char *appIdEnd = ctx->appIdEnd;
@@ -324,24 +324,25 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
             break;
         }
 
-        jsonEncodeString(vid, &jvid);
-        jsonEncodeString(cipher, &jdata);
-        json = ruStringNewf(
-                "{\"version\":%d,\"op\":\"update\","
-                "\"vid\":%s,\"data\":%s", PROTO_VERSION, jvid, jdata);
+        jrq = ruJsonStart(true);
+        ruJsonSetKeyInt(jrq, "version", PROTO_VERSION);
+        ruJsonSetKeyStr(jrq, "op", "update");
+        ruJsonSetKeyStr(jrq, "vid", vid);
+        ruJsonSetKeyStr(jrq, "data", cipher);
         if (indexWords) {
-            ret = encodeWordList(indexWords, json, "words");
+            ret = encodeWordList(indexWords, jsn, "words");
             if (ret != RUE_OK) break;
         }
-        ruStringAppend(json, "}");
+        perm_chars str =  NULL;
+        ret = ruJsonWrite(jsn, &str);
+        if (ret != RUE_OK) break;
 
-        ret = newKvList(&kvl, JSON_FIELD,
-                        ruStringGetCString(json), 0);
+        ret = newKvList(&kvl, JSON_FIELD, str, 0);
         if (ret != RUE_OK) {
             ruCritLogf("failed to create parameter list. Ec: %d", ret);
             break;
         }
-        ruVerbLogf("Do request: %s", ruStringGetCString(json));
+        ruVerbLogf("Do request: %s", str);
         ret = doRequest(ctx, ctx->serviceUrl, kvl,
                         &response, NULL);
         if (ret != RUE_OK) {
@@ -350,8 +351,8 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
             break;
         }
         // parse response
-        node = getJson(response);
-        ret = parseStatus(node, NULL);
+        jsn = getJson(response);
+        ret = parseStatus(jsn, NULL);
         if (ret != RUE_OK) {
             break;
         }
@@ -360,9 +361,9 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
 
     } while(0);
 
-    yajl_tree_free(node);
+    jrq = ruJsonFree(jrq);
+    jsn = ruJsonFree(jsn);
     freeKvList(kvl);
-    ruStringFree(json,  false);
     ruFree(response);
     ruFree(jvid);
     ruFree(jdata);
@@ -514,28 +515,31 @@ DVAPI int32_t dvGetPublished(dvCtx dc, const char* passwd, ruList vids,
 DVAPI int32_t dvSearch(dvCtx dc, ruList searchWords, ruList* vids) {
     char *response = NULL;
     dvKvList kvl = NULL;
-    yajl_val node = NULL;
+    ruJson jrq = NULL;
+    ruJson jsn = NULL;
     int32_t ret;
 
     if (!dc || !searchWords || !vids) return RUE_PARAMETER_NOT_SET;
     dvctx ctx = getDvCtx(dc);
     if (!ctx) return RUE_INVALID_PARAMETER;
 
-    ruString json = ruStringNewf(
-            "{\"version\":%d,\"op\":\"search\"", PROTO_VERSION);
+    jrq = ruJsonStart(true);
+    ruJsonSetKeyInt(jrq, "version", PROTO_VERSION);
+    ruJsonSetKeyStr(jrq, "op", "search");
 
     do {
-        ret = encodeWordList(searchWords, json, "words");
+        ret = encodeWordList(searchWords, jsn, "words");
         if (ret != RUE_OK) break;
-        ruStringAppend(json, "}");
+        perm_chars str =  NULL;
+        ret = ruJsonWrite(jsn, &str);
+        if (ret != RUE_OK) break;
 
-        ret = newKvList(&kvl, JSON_FIELD,
-                        ruStringGetCString(json), 0);
+        ret = newKvList(&kvl, JSON_FIELD, str, 0);
         if (ret != RUE_OK) {
             ruCritLogf("failed to create parameter list. Ec: %d", ret);
             break;
         }
-        ruVerbLogf("Do request: %s", ruStringGetCString(json));
+        ruVerbLogf("Do request: %s", str);
         ret = doRequest(ctx, ctx->serviceUrl, kvl,
                         &response, NULL);
         if (ret != RUE_OK) {
@@ -544,17 +548,17 @@ DVAPI int32_t dvSearch(dvCtx dc, ruList searchWords, ruList* vids) {
             break;
         }
         // parse response
-        node = getJson(response);
-        ret = parseStatus(node, NULL);
+        jsn = getJson(response);
+        ret = parseStatus(jsn, NULL);
         if (ret != RUE_OK) {
             break;
         }
-        ret = parseSearchData(node, vids);
+        ret = parseSearchData(jsn, vids);
     } while(0);
 
-    yajl_tree_free(node);
+    ruJsonFree(jrq);
+    ruJsonFree(jsn);
     freeKvList(kvl);
-    ruStringFree(json,  false);
     ruFree(response);
     return ret;
 }
@@ -562,28 +566,31 @@ DVAPI int32_t dvSearch(dvCtx dc, ruList searchWords, ruList* vids) {
 DVAPI int32_t dvDelete(dvCtx dc, ruList vids) {
     char *response = NULL;
     dvKvList kvl = NULL;
-    yajl_val node = NULL;
+    ruJson jrq = NULL;
+    ruJson jsn = NULL;
     int32_t ret;
 
     if (!dc) return RUE_PARAMETER_NOT_SET;
     dvctx ctx = getDvCtx(dc);
     if (!ctx) return RUE_INVALID_PARAMETER;
 
-    ruString json = ruStringNewf(
-            "{\"version\":%d,\"op\":\"delete\"", PROTO_VERSION);
+    jrq = ruJsonStart(true);
+    ruJsonSetKeyInt(jrq, "version", PROTO_VERSION);
+    ruJsonSetKeyStr(jrq, "op", "delete");
 
     do {
-        ret = encodeWordList(vids, json, "vid");
+        ret = encodeWordList(vids, jsn, "vid");
         if (ret != RUE_OK) break;
-        ruStringAppend(json, "}");
+        perm_chars str =  NULL;
+        ret = ruJsonWrite(jsn, &str);
+        if (ret != RUE_OK) break;
 
-        ret = newKvList(&kvl, JSON_FIELD,
-                        ruStringGetCString(json), 0);
+        ret = newKvList(&kvl, JSON_FIELD, str, 0);
         if (ret != RUE_OK) {
             ruCritLogf("failed to create parameter list. Ec: %d", ret);
             break;
         }
-        ruVerbLogf("Do request: %s", ruStringGetCString(json));
+        ruVerbLogf("Do request: %s", str);
         ret = doRequest(ctx, ctx->serviceUrl, kvl,
                         &response, NULL);
         if (ret != RUE_OK) {
@@ -592,16 +599,16 @@ DVAPI int32_t dvDelete(dvCtx dc, ruList vids) {
             break;
         }
         // parse response
-        node = getJson(response);
-        ret = parseStatus(node, NULL);
+        jsn = getJson(response);
+        ret = parseStatus(jsn, NULL);
         if (ret != RUE_OK) {
             break;
         }
     } while(0);
 
-    yajl_tree_free(node);
+    ruJsonFree(jrq);
+    ruJsonFree(jsn);
     freeKvList(kvl);
-    ruStringFree(json,  false);
     ruFree(response);
     return ret;
 }

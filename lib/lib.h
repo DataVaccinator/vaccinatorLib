@@ -26,9 +26,6 @@
 #include <vaccinator.h>
 #include <stdarg.h>
 #include <string.h>
-#include <yajl/yajl_parse.h>
-#include <yajl/yajl_tree.h>
-#include <yajl/yajl_gen.h>
 #define CURL_DISABLE_TYPECHECK
 #include "curl/curl.h"
 
@@ -153,13 +150,11 @@ void dvSetError(const char *format, ...);
 void dvCleanerAdd(const char *secret);
 
 // json.c
-yajl_val getJson(const char *json);
-int32_t jsonEncodeString(const char *input, char **output);
-int32_t parseString(yajl_val node, const char *key, char **value);
-int32_t parseStatus(yajl_val node, bool *invalidRequest);
-int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
+ruJson getJson(trans_chars json);
+int32_t parseStatus(ruJson jsn, bool *invalidRequest);
+int32_t parseVidData(alloc_bytes key, ruJson jsn, ruList vids, bool recode,
                      ruMap *data);
-int32_t parseSearchData(yajl_val node, ruList *vids);
+int32_t parseSearchData(ruJson jsn, ruList *vids);
 
 // crypto.c
 int32_t dvSearchHash(const char* term, const char* key, char** hash, bool indexing);

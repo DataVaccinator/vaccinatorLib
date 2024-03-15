@@ -21,132 +21,61 @@
  */
 #include "lib.h"
 
-int32_t jsonEncodeString(const char*input, char** output) {
-    yajl_gen g;
-    int stat;
-    perm_bytes buf;
-    rusize olen;
+ruJson getJson(trans_chars json) {
     int32_t ret;
-
-    if (!input || !output) return RUE_PARAMETER_NOT_SET;
-
-    g = yajl_gen_alloc(NULL);
-    if (!g) {
-        ruCritLog("Failed to allocate yail generator");
-        return RUE_OUT_OF_MEMORY;
+    ruJson jsn = ruJsonParse(json, &ret);
+    if (ret != RUE_OK) {
+        dvSetError(ruLastError());
     }
-    do {
-        stat = yajl_gen_config(g, yajl_gen_validate_utf8, 1);
-        if (!stat) {
-            ruCritLog("Failed to configure yail generator");
-            ret = RUE_GENERAL;
-            break;
-        }
-        stat = yajl_gen_string(g, (trans_bytes)input,
-                               strlen(input));
-        if (stat != yajl_status_ok) {
-            ruCritLogf("Failed to generate string [%s]", input);
-            ret = RUE_GENERAL;
-            break;
-        }
-        stat = yajl_gen_get_buf(g, &buf, &olen);
-        if (stat != yajl_status_ok) {
-            ruCritLogf("Failed to get encoded string. EC: %d", stat);
-            ret = RUE_GENERAL;
-            break;
-        }
-        *output = ruStrDup((const char*)buf);
-        ret = RUE_OK;
-
-    } while(false);
-
-    if (g) yajl_gen_free(g);
-
-    return ret;
+    return jsn;
 }
 
-yajl_val getJson(const char* json) {
-    yajl_val node;
-    char errbuf[1024];
-    node = yajl_tree_parse((const char *) json, errbuf, sizeof(errbuf));
-    /* parse error handling */
-    if (node == NULL) {
-        if (strlen(errbuf)) {
-            dvSetError("parse_error: %s\nContent: %s", errbuf, json);
-        } else {
-            dvSetError("parse_error: unknown error\nContent: %s", json);
-        }
-        return NULL;
-    }
-    return node;
-}
-
-int32_t parseString(yajl_val node, const char* key, char** value) {
-    const char * path[] = { key, (const char *) 0 };
-    yajl_val v = yajl_tree_get(node, path, yajl_t_string);
-    if (v) {
-        *value = ruStrDup(YAJL_GET_STRING(v));
-        ruVerbLogf("%s is %s" , key, *value);
-        return RUE_OK;
-    }
-    ruCritLogf("no %s specified", key);
-    return DVE_PROTOCOL_ERROR;
-}
-
-int32_t parseStatus(yajl_val node, bool* invalidRequest) {
-    if (!node) return RUE_PARAMETER_NOT_SET;
+int32_t parseStatus(ruJson jsn, bool* invalidRequest) {
+    int32_t ret = RUE_PARAMETER_NOT_SET;
+    if (!jsn) return ret;
     if (invalidRequest) *invalidRequest = true;
 
-    const char *path[] = {STATUS, (const char *) 0};
-    yajl_val v = yajl_tree_get(node, path, yajl_t_string);
-    char *nodeValue = NULL; /* do not free */
-
-    if (!v) {
+    perm_chars strVal = ruJsonKeyStr(jsn, STATUS, &ret);
+    if (!strVal) {
         ruCritLog("no status specified");
         return DVE_PROTOCOL_ERROR;
     }
-    nodeValue = YAJL_GET_STRING(v);
-    if (ruStrEquals(STATUS_OK, nodeValue)) {
+    if (ruStrEquals(STATUS_OK, strVal)) {
         // status: OK
         return RUE_OK;
     }
 
     /* not ok get the error code */
-    int32_t ret;
-    path[0] = "code";
-    v = yajl_tree_get(node, path, yajl_t_number);
-    if (v) {
-        ret = (int)YAJL_GET_INTEGER(v);
-    } else {
+    int32_t code = ruJsonKeyInt(jsn, "code", &ret);
+    if (ret != RUE_OK) {
         ruCritLog("status not ok and no ec set");
         ret = DVE_PROTOCOL_ERROR;
+    } else {
+        ret = code;
     }
-    path[0] = "desc";
-    v = yajl_tree_get(node, path, yajl_t_string);
-    if (v) {
-        char *desc = YAJL_GET_STRING(v);
+    perm_chars desc = ruJsonKeyStr(jsn, "desc", NULL);
+    if (desc) {
         dvSetError(desc);
     }
-    if (ruStrEquals(STATUS_INVALID, nodeValue)) {
+    if (ruStrEquals(STATUS_INVALID, strVal)) {
         ruVerbLogf("status was invalid. EC: %d", ret);
         if (invalidRequest) *invalidRequest = true;
         return ret;
     }
-    if (ruStrEquals(STATUS_ERROR, nodeValue)) {
-        ruCritLogf("status was of unknown type: '%s'", nodeValue);
+    if (ruStrEquals(STATUS_ERROR, strVal)) {
+        ruCritLogf("status was of unknown type: '%s'", strVal);
     }
     return ret;
 }
 
-int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
+int32_t parseVidData(alloc_bytes key, ruJson jsn, ruList vids, bool recode,
                      ruMap* data) {
     int32_t ret = RUE_OK;
-    if (!node || !vids || !data) return RUE_PARAMETER_NOT_SET;
+    if (!jsn || !vids || !data) return RUE_PARAMETER_NOT_SET;
 
     ruVerbLog("Starting");
-    const char * path[] = { "data", (const char *) 0 };
-    yajl_val vd, dta = yajl_tree_get(node, path, yajl_t_object);
-    if (!YAJL_IS_OBJECT(dta)) {
+    ruJson jdat = ruJsonKeyMap(jsn, "data", NULL);
+    if (!jdat) {
         ruWarnLog("response did not include data key");
         return DVE_PROTOCOL_ERROR;
     }
@@ -155,17 +84,13 @@ int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
     dvGetRes gr = NULL;
     ruIterator li = ruListIter(vids);
     for (char* vid = ruIterNext(li, char*); vid; vid = ruIterNext(li, char*)) {
-        path[0] = vid;
-        vd = yajl_tree_get(dta, path, yajl_t_object);
-        if (!vd || !YAJL_IS_OBJECT(vd)) {
+        ruJson jvd = ruJsonKeyMap(jdat, vid, NULL);
+        if (!jvd) {
             ruWarnLogf("response did not include entry for '%s'", vid);
             continue;
         }
-        char *nodeValue = NULL; /* do not free */
-        yajl_val v;
-        path[0] = STATUS;
-        v = yajl_tree_get(vd, path, yajl_t_string);
-        if (!v) {
+        perm_chars nodeValue = ruJsonKeyStr(jvd, STATUS, NULL);
+        if (!nodeValue) {
             ruCritLogf("no status specified for entry '%s'", vid);
             ret = DVE_PROTOCOL_ERROR;
             break;
@@ -176,7 +101,6 @@ int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
                                  ruTypePtr(freeGetRes));
         }
 
-        nodeValue = YAJL_GET_STRING(v);
         if (ruStrEquals(STATUS_NOT_FOUND, nodeValue)) {
             ruVerbLogf("status for entry '%s' id not found", vid);
             ret = ruMapPut(*data, ruStrDup(vid),
@@ -192,14 +116,12 @@ int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
             ret = DVE_PROTOCOL_ERROR;
             break;
         }
-        path[0] = "data";
-        v = yajl_tree_get(vd, path, yajl_t_string);
-        if (!v) {
+
+        perm_chars cipher = ruJsonKeyStr(jvd, "data", NULL);
+        if (!cipher) {
             ruCritLogf("no data specified for entry '%s'", vid);
             continue;
         }
-
-        char *cipher = YAJL_GET_STRING(v);
         gr = NULL;
         char rcs[3];
         memset(rcs, 0, sizeof(rcs));
@@ -242,30 +164,30 @@ int32_t parseVidData(alloc_bytes key, yajl_val node, ruList vids, bool recode,
     return ret;
 }
 
-int32_t parseSearchData(yajl_val node, ruList* vids) {
-    if (!node || !vids) return RUE_PARAMETER_NOT_SET;
+int32_t parseSearchData(ruJson jsn, ruList* vids) {
+    if (!jsn || !vids) return RUE_PARAMETER_NOT_SET;
 
     ruVerbLog("Starting");
-    const char * path[] = { "vids", (const char *) 0 };
-    yajl_val dta = yajl_tree_get(node, path, yajl_t_array);
-    if (!YAJL_IS_ARRAY(dta)) {
+    ruJson jvids = ruJsonKeyArray(jsn, "vids", NULL);
+    if (!jvids) {
         ruWarnLog("response did not include vids key");
         return DVE_PROTOCOL_ERROR;
     }
-    ruVerbLogf("number of vids: %d" , (int)dta->u.array.len);
+    rusize i, last = ruJsonArrayLen(vids, NULL);
+    ruVerbLogf("number of vids: %d" , (int)last);
     int32_t ret = RUE_OK;
-    for (uint i = 0; i < dta->u.array.len; i++) {
-        yajl_val vid = dta->u.array.values[i];
-        if (!YAJL_IS_STRING(vid)) {
+    for (i = 0; i < last; i++) {
+        perm_chars vid = ruJsonIdxStr(vids, i, NULL);
+        if (!vid) {
             ruWarnLog("array entry was no string");
             continue;
         }
         if (!*vids) {
             *vids = ruListNew(ruTypeStrFree());
         }
-        ret = ruListAppend(*vids, ruStrDup(YAJL_GET_STRING(vid)));
+        ret = ruListAppend(*vids, ruStrDup(vid));
         if (ret != RUE_OK) {
-            ruCritLogf("failed adding entry '%s' to map", vid);
+            ruCritLogf("failed adding entry '%s' to list", vid);
             break;
         }
     }
