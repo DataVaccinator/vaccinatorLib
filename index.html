@@ -130,7 +130,7 @@ Example Usage</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// The performance of this logger is inadequate for production usage.</span></div>
 <div class="line"><span class="comment">// It is merely here to showcase the callback usage.</span></div>
-<div class="line"><span class="keywordtype">void</span> myLogFunc (<span class="keyword">const</span> <span class="keywordtype">void</span> *user_data, <span class="keyword">const</span> <span class="keywordtype">char</span> *message) {</div>
+<div class="line"><span class="keywordtype">void</span> myLogFunc (<span class="keyword">const</span> <span class="keywordtype">void</span> *user_data, uint32_t level, <span class="keyword">const</span> <span class="keywordtype">char</span> *message) {</div>
 <div class="line">    FILE *wh = <a class="codeRef" href="https://regify.github.io/regify-util/group__io.html#gaaf60d483f5ec520635d5260e0cfe287d">ruFOpen</a>((<span class="keyword">const</span> <span class="keywordtype">char</span>*) user_data, <span class="stringliteral">&quot;a&quot;</span>, NULL);</div>
 <div class="line">    <span class="keywordflow">if</span> (wh) {</div>
 <div class="line">        fwrite(message, strlen(message), <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), wh);</div>
