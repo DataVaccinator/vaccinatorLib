@@ -36,6 +36,8 @@
 // The performance of this logger is inadequate for production usage.
 // It is merely here to showcase the callback usage.
 void myLogFunc (const void *user_data, uint32_t level, const char *message) {
+    // beware of potential close logger signal
+    if (!message) return;
     FILE *wh = ruFOpen((const char*) user_data, "a", NULL);
     if (wh) {
         fwrite(message, strlen(message), sizeof(char), wh);
