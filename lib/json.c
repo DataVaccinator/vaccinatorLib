@@ -46,7 +46,7 @@ int32_t parseStatus(ruJson jsn, bool* invalidRequest) {
     }
 
     /* not ok get the error code */
-    int32_t code = ruJsonKeyInt(jsn, "code", &ret);
+    int32_t code = (int32_t)ruJsonKeyInt(jsn, "code", &ret);
     if (ret != RUE_OK) {
         ruCritLog("status not ok and no ec set");
         ret = DVE_PROTOCOL_ERROR;
