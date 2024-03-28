@@ -33,18 +33,6 @@
 #include <vaccinator.h>
 #include <string.h>
 
-// The performance of this logger is inadequate for production usage.
-// It is merely here to showcase the callback usage.
-void myLogFunc (const void *user_data, uint32_t level, const char *message) {
-    // beware of potential close logger signal
-    if (!message) return;
-    FILE *wh = ruFOpen((const char*) user_data, "a", NULL);
-    if (wh) {
-        fwrite(message, strlen(message), sizeof(char), wh);
-        fclose(wh);
-    }
-}
-
 int32_t headerCb(void* usrCtx, dvSetHeaderFn setHeader, void* headerCtx) {
     // This a static example that ignores the userCtx
     return setHeader(headerCtx, "Cache-Control", "max-age=60");
@@ -72,6 +60,7 @@ int main ( int argc, char **argv ) {
     char *namevid = NULL, *addrvid = NULL, *a1 = NULL;
     ruList vids = NULL, indexTerms = NULL, searchTerms = NULL, foundVids = NULL;
     ruMap data = NULL;
+    ruSinkCtx rsc = NULL;
 
     do {
         // local cache
@@ -90,9 +79,8 @@ int main ( int argc, char **argv ) {
             // -d turns on verbose debug logging
             // -v turns on verbose debug logging with curl debug logging
             if (ruStrCmp(a1, "-v") == 0 || ruStrCmp(a1, "-d") == 0) {
-                // this logger is preferred over ruSetLogger
-                // because it sanitizes sensitive information out
-                dvSetCleanLogger(myLogFunc, RU_LOG_VERB, (void*)logfile);
+                rsc = ruSinkCtxNew(logfile, NULL, NULL);
+                dvSetCleanLogger(ruFileLogSink, RU_LOG_VERB, rsc);
             } else {
                 a1 = NULL;
             }
@@ -190,6 +178,7 @@ int main ( int argc, char **argv ) {
     if (a1) {
         printf("You will find debug logging in '%s'\n", logfile);
     }
+    ruSinkCtxFree(rsc);
 
     return ret;
 }
