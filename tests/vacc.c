@@ -221,11 +221,11 @@ START_TEST ( run ) {
     ret = dvNew(&dc, PROVIDER_URL, APPID, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
+    if (ruStrEquals("1", ruGetenv("EASYSSL"))) {
         // disable certificate checks
         test = "dvSetProp";
         ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
-                fail_unless(exp == ret, retText, test, exp, ret);
+        fail_unless(exp == ret, retText, test, exp, ret);
     }
 
     test = "dvSetHeaderCb";
@@ -312,7 +312,7 @@ START_TEST ( run ) {
     bool found = false;
     for(char* vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*)) {
         ruVerbLogf("fndVids2 vid: '%s'", vd);
-        if (ruStrCmp(fovid, vd) == 0) found = true;
+        if (ruStrEquals(fovid, vd)) found = true;
     }
     fail_unless(true == found, retText, test, true, found);
 
@@ -364,7 +364,7 @@ START_TEST ( publish ) {
         ret = dvNew(&dc, PROVIDER_URL, APPID, NULL);
         fail_unless(exp == ret, retText, test, exp, ret);
 
-        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrEquals("1", ruGetenv("EASYSSL"))) {
             // disable certificate checks
             test = "dvSetProp";
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");

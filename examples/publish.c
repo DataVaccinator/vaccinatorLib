@@ -43,7 +43,7 @@ int main ( int argc, char **argv ) {
         if (ret != RUE_OK) break;
 
         // check for easy SSL mode
-        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrEquals("1", ruGetenv("EASYSSL"))) {
             // disable certificate checks
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
             if (ret) break;

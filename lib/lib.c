@@ -137,11 +137,11 @@ static int32_t dvPost(dvCtx dc, const char* data, char** vid, ruList indexWords,
             ruJsonSetKeyInt(jrq, "duration", durationDays);
         }
         if (indexWords) {
-            ret = encodeWordList(indexWords, jsn, "words");
+            ret = encodeWordList(indexWords, jrq, "words");
             if (ret != RUE_OK) break;
         }
         perm_chars str =  NULL;
-        ret = ruJsonWrite(jsn, &str);
+        ret = ruJsonWrite(jrq, &str);
         if (ret != RUE_OK) break;
 
         ret = newKvList(&kvl, JSON_FIELD, str, 0);
@@ -251,7 +251,7 @@ static int32_t doGet(dvCtx dc, ruList vids, ruMap* data, trans_chars passwd,
         ret = encodeWordList(getvids, jrq, "vid");
         if (ret != RUE_OK) break;
         perm_chars str =  NULL;
-        ret = ruJsonWrite(jsn, &str);
+        ret = ruJsonWrite(jrq, &str);
         if (ret != RUE_OK) break;
 
         ret = newKvList(&kvl, JSON_FIELD, str, 0);
@@ -330,11 +330,11 @@ static int32_t doUpdate(dvCtx dc, const char* vid, const char* data,
         ruJsonSetKeyStr(jrq, "vid", vid);
         ruJsonSetKeyStr(jrq, "data", cipher);
         if (indexWords) {
-            ret = encodeWordList(indexWords, jsn, "words");
+            ret = encodeWordList(indexWords, jrq, "words");
             if (ret != RUE_OK) break;
         }
         perm_chars str =  NULL;
-        ret = ruJsonWrite(jsn, &str);
+        ret = ruJsonWrite(jrq, &str);
         if (ret != RUE_OK) break;
 
         ret = newKvList(&kvl, JSON_FIELD, str, 0);
@@ -528,10 +528,10 @@ DVAPI int32_t dvSearch(dvCtx dc, ruList searchWords, ruList* vids) {
     ruJsonSetKeyStr(jrq, "op", "search");
 
     do {
-        ret = encodeWordList(searchWords, jsn, "words");
+        ret = encodeWordList(searchWords, jrq, "words");
         if (ret != RUE_OK) break;
         perm_chars str =  NULL;
-        ret = ruJsonWrite(jsn, &str);
+        ret = ruJsonWrite(jrq, &str);
         if (ret != RUE_OK) break;
 
         ret = newKvList(&kvl, JSON_FIELD, str, 0);
@@ -579,10 +579,10 @@ DVAPI int32_t dvDelete(dvCtx dc, ruList vids) {
     ruJsonSetKeyStr(jrq, "op", "delete");
 
     do {
-        ret = encodeWordList(vids, jsn, "vid");
+        ret = encodeWordList(vids, jrq, "vid");
         if (ret != RUE_OK) break;
         perm_chars str =  NULL;
-        ret = ruJsonWrite(jsn, &str);
+        ret = ruJsonWrite(jrq, &str);
         if (ret != RUE_OK) break;
 
         ret = newKvList(&kvl, JSON_FIELD, str, 0);
@@ -627,8 +627,9 @@ DVAPI int32_t dvWipe(dvCtx dc, ruList vids) {
             ruCritLogf("failed getting vid list from store. ec: %d", ret);
             return ret;
         }
-    } else if (ruListSize(vids, NULL) == -1) {
-        return RUE_INVALID_PARAMETER;
+    } else {
+        ruListSize(vids, &ret);
+        if (ret != RUE_OK) return ret;
     }
 
     ruIterator li = ruListIter(myvids);
@@ -814,13 +815,6 @@ DVAPI int dvSetProp(dvCtx dc, enum dvCtxOpt opt, const char* value) {
             ruFree(ctx->certPath);
             if (value)
                 ctx->certPath = ruStrDup(value);
-            break;
-        case DV_SECRET_PLACE_HOLDER:
-            ruFree(dvPwReplacement);
-            dvPwReplacement = ruStrDup(value);
-            break;
-        case DV_SECRET:
-            dvCleanerAdd(value);
             break;
         case DV_SKIP_CERT_CHECK:
             if (!value || ruStrEquals(value, "0")) {

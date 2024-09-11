@@ -91,7 +91,7 @@ DVAPI int32_t dvGetVid(ruMap vidMap, const char* vid, char** pid) {
     dvGetRes gr = NULL;
     int32_t ret = ruMapGet(vidMap, vid, &gr);
     if (ret == RUE_OK && gr) {
-        if (*pid) *pid = gr->data;
+        if (pid) *pid = gr->data;
         ret = gr->status;
     }
     return ret;
@@ -100,31 +100,10 @@ DVAPI int32_t dvGetVid(ruMap vidMap, const char* vid, char** pid) {
 /******************************************************************************/
 /*                          CLEAN LOGGER                                      */
 /******************************************************************************/
-// password cleaner to store credentials in case caller wants to clean the logs.
-static ruCleaner pwCleaner_ = NULL;
 // The current dvPwReplacement of a secret when calling dvSetProp with DV_SECRET.
 char *dvPwReplacement = dvDefaultSecretPlaceHolder;
 
-static ruCleaner dvGetCleaner(void) {
-    if (!pwCleaner_) {
-        pwCleaner_ = ruCleanNew(0);
-    }
-    return pwCleaner_;
-}
-
 void dvCleanerAdd(trans_chars secret) {
-    if (dvPwReplacement) {
-        ruCleanAdd(dvGetCleaner(), secret, dvPwReplacement);
-    } else {
-        ruCleanAdd(dvGetCleaner(), secret, dvDefaultSecretPlaceHolder);
-    }
-}
-
-DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData) {
-    if (logger) {
-        ruSetLogger(logger, logLevel, userData, dvGetCleaner(), true);
-    } else {
-        ruSetLogger(NULL, logLevel, NULL, NULL, false);
-    }
+    ruCleanAdd(ruGetCleaner(), secret, dvDefaultSecretPlaceHolder);
 }
 

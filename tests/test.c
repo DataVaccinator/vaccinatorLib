@@ -23,12 +23,10 @@
 
 int main ( int argc, char **argv ) {
     int32_t number_failed;
-    if (argc > 1 && ruStrCmp(argv[1], "-v") == 0) {
-        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL,
-                    NULL, false);
+    if (argc > 1 && ruStrEquals(argv[1], "-v")) {
+        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, false, false);
     } else {
-        ruSetLogger(ruStdErrLogSink, RU_LOG_INFO, NULL,
-                    NULL, false);
+        ruSetLogger(ruStdErrLogSink, RU_LOG_INFO, NULL, false, false);
     }
     Suite *suite = suite_create("vaccinator");
     suite_add_tcase(suite, cipherTests());

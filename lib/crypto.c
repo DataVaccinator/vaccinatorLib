@@ -459,7 +459,7 @@ int32_t dvAes256Enc(trans_bytes key, const char* cs, const char* str, char** cip
     rusize blen = 0;  // payload base64 encoded set at run time
 
     do {
-        ruVerbLogf("looking to recipe '%s'", str);
+        ruVerbLogf("looking to encrypt '%s'", str);
         // get length estimates
         // cipher text
         ret = aesEnc(key, str, iv, NULL, &ciphsz);
@@ -532,7 +532,7 @@ int32_t dvAes256Dec(trans_bytes key, const char* cipherRecipe, char** data, char
     do {
         // recipe:cs:iv:encoding:payload
         // aes-256-cbc:18:835cc...c20:b:YOB4WAENU9TmlIykp1VV0w==
-        ruVerbLogf("looking at recipe '%s'", cipherRecipe);
+        ruVerbLogf("looking at cipher recipe '%s'", cipherRecipe);
         // sanity check
         if (!ruStrStartsWith(cipherRecipe, "aes-256-cbc:", NULL)) {
             dvSetError("recipe '%s' is incompatible", cipherRecipe);

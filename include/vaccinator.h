@@ -592,20 +592,6 @@ DVAPI int32_t dvSetPostCb(dvCtx dc, dvPostCb callback, void* cbCtx);
 DVAPI const char* dvVersion(void);
 
 /**
- * \brief Sets the global logging function for this process.
- *
- * This function is like \ref ruSetLogger with the difference that log data has
- * its credentials sanitized out. This is the preferred alternative to
- * \ref ruSetLogger when using the \ref dvclient. You can specify
- * credentials to be sanitized out by calling \ref dvSetProp with \ref DV_SECRET.
- * @param logger Logging function that will be called with messages.
- * @param logLevel Loglevel to determine what gets logged.
- * @param userData Opaque custom user data that will be passed to the
- *                 \ref ruLogFunc implementation.
- */
-DVAPI void dvSetCleanLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData);
-
-/**
  * \brief Constants used to set \ref dvclient context parameters.
  */
 enum dvCtxOpt {
@@ -630,21 +616,6 @@ enum dvCtxOpt {
     DV_APPVERSION,
     /** File path to certificate authority file or directory. */
     DV_CERT_PATH,
-    /**
-     * A secret to replace in the logs when calling \ref ruVerbLogf type functions.
-     * This happens when the logger is initialized by calling \ref dvSetCleanLogger.
-     * The secret is replaced with whatever the value of \ref DV_SECRET_PLACE_HOLDER
-     * is at the time of this call, not at the time the log call.
-     */
-    DV_SECRET,
-    /**
-     * The place holder that will replace a given \ref DV_SECRET in a
-     * log cleaned using \ref ruVerbLogf. When this has not been set or set to
-     * NULL, it is replaced with \ref dvDefaultSecretPlaceHolder instead. This
-     * value is not thread safe and it is copied when \ref dvSetProp is called with
-     * \ref DV_SECRET, so it may be set to various values for given secrets.
-     */
-    DV_SECRET_PLACE_HOLDER,
     /**
      * This will disable SSL certificate verification when set to non 0.
      * Helpful when developing.

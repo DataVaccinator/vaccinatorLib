@@ -29,7 +29,14 @@ set(VAULT_PW vaccinator CACHE STRING
 
 list(APPEND CMAKE_PREFIX_PATH ${CHECK_BASE})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tests/")
-find_package(Check REQUIRED)
+if(MSVC)
+    set(CHECK_LIBRARIES check.lib)
+elseif(MAC OR MINGW)
+    set(CHECK_LIBRARIES check)
+else()
+    set(CHECK_LIBRARIES -lcheck -lm -lrt -lsubunit)
+endif()
+#find_package(Check REQUIRED)
 
 if(WIN AND NOT MINGW)
     add_compile_definitions(_CRT_SECURE_NO_DEPRECATE CURL_STATICLIB=ON)

@@ -78,9 +78,9 @@ int main ( int argc, char **argv ) {
             a1 = argv[1];
             // -d turns on verbose debug logging
             // -v turns on verbose debug logging with curl debug logging
-            if (ruStrCmp(a1, "-v") == 0 || ruStrCmp(a1, "-d") == 0) {
+            if (ruStrEquals(a1, "-v") || ruStrEquals(a1, "-d")) {
                 rsc = ruSinkCtxNew(logfile, NULL, NULL);
-                dvSetCleanLogger(ruFileLogSink, RU_LOG_VERB, rsc);
+                ruSetLogger(ruFileLogSink, RU_LOG_VERB, rsc, true, true);
             } else {
                 a1 = NULL;
             }
@@ -90,12 +90,12 @@ int main ( int argc, char **argv ) {
         ret = dvNew(&dc, PROVIDER_URL, APPID, kvs);
         if (ret) break;
         // check for easy SSL mode
-        if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
+        if (ruStrEquals("1", ruGetenv("EASYSSL"))) {
             // disable certificate checks
             ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
             if (ret) break;
         }
-        if (ruStrCmp(a1, "-v") == 0) {
+        if (ruStrEquals(a1, "-v")) {
             // turn on curl debug logging
             ret = dvSetProp(dc, DV_CURL_LOGGING, "1");
             if (ret) break;

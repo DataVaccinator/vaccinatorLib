@@ -108,7 +108,7 @@ ruList search(dvCtx dc, const char* appId, const char* word, const char* searchv
         for (char *vd = ruIterNext(li, char*); li;
              vd = ruIterNext(li, char*)) {
             ruVerbLogf("searchvids vid: '%s'", vd);
-            if (ruStrCmp(searchvid, vd) == 0) found = true;
+            if (ruStrEquals(searchvid, vd)) found = true;
         }
         fail_unless(true == found, retText, test, true, found);
     }
@@ -183,7 +183,7 @@ void dochange(dvCtx dc, const char* appId, ruList vids, rusize cnt, const char* 
                     vd = ruIterNext(li, char*)) {
         ret = dvGetVid(vidMap, vd, &out);
         ruVerbLogf("vid: '%s' data: '%s' status: %d", vd, out, ret);
-        if (ruStrCmp(misvid, vd) == 0) {
+        if (ruStrEquals(misvid, vd)) {
             exp = DVE_INVALID_CREDENTIALS;
             fail_unless(exp == ret, retText, test, exp, ret);
             fail_unless(NULL == out, retText, test, NULL, out);
@@ -241,7 +241,7 @@ START_TEST ( change ) {
     ret = dvNew(&dc, PROVIDER_URL, oldId, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    if (ruStrCmp("1", ruGetenv("EASYSSL")) == 0) {
+    if (ruStrEquals("1", ruGetenv("EASYSSL"))) {
         // disable certificate checks
         test = "dvSetProp";
         ret = dvSetProp(dc, DV_SKIP_CERT_CHECK, "1");
