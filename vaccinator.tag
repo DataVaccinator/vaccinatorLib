@@ -236,18 +236,6 @@
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>DV_SECRET</name>
-      <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>gga59d119d7c5cbaa850d9b7bd96792479fa65628afe51aae3be847e9a5f69342269</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>DV_SECRET_PLACE_HOLDER</name>
-      <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>gga59d119d7c5cbaa850d9b7bd96792479fae61ea3c13a4528b6868da3915237ff76</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
       <name>DV_SKIP_CERT_CHECK</name>
       <anchorfile>group__dvgeneral.html</anchorfile>
       <anchor>gga59d119d7c5cbaa850d9b7bd96792479fadefbba382d201f196697b44487f8932c</anchor>
@@ -293,13 +281,6 @@
       <anchorfile>group__dvgeneral.html</anchorfile>
       <anchor>ga2cab763f3aa1b83617c9a7081ac83e5e</anchor>
       <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>DVAPI void</type>
-      <name>dvSetCleanLogger</name>
-      <anchorfile>group__dvgeneral.html</anchorfile>
-      <anchor>gaf27b3954e334fe85fde4f063e13dd65c</anchor>
-      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</arglist>
     </member>
     <member kind="function">
       <type>DVAPI int</type>
