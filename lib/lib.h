@@ -60,8 +60,6 @@ extern "C" {
 
 extern const char *myName;
 extern const char *myVersion;
-// The current dvPwReplacement of a secret when calling dvSetProp with DV_SECRET.
-extern char *dvPwReplacement;
 
 typedef struct dv_ctx *dvctx;
 typedef struct dv_get_result *dvGetRes;

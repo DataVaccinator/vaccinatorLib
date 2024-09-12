@@ -100,9 +100,6 @@ DVAPI int32_t dvGetVid(ruMap vidMap, const char* vid, char** pid) {
 /******************************************************************************/
 /*                          CLEAN LOGGER                                      */
 /******************************************************************************/
-// The current dvPwReplacement of a secret when calling dvSetProp with DV_SECRET.
-char *dvPwReplacement = dvDefaultSecretPlaceHolder;
-
 void dvCleanerAdd(trans_chars secret) {
     ruCleanAdd(ruGetCleaner(), secret, dvDefaultSecretPlaceHolder);
 }

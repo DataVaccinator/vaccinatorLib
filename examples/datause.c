@@ -106,7 +106,7 @@ int main ( int argc, char **argv ) {
         // Mask our password in the logs so it is replace by ^^^SECRET^^^
         // or whatever was set by DV_SECRET_PLACE_HOLDER last
         // APPID has already been masked by dvNew
-        ret = dvSetProp(dc, DV_SECRET, passwd);
+        ret = ruCleanAdd(ruGetCleaner(), passwd, "^^^SECRET^^^");
         if (ret) break;
         // sample usage of the post fields callback
         ret = dvSetPostCb(dc, &postCb, (void *) passwd);
